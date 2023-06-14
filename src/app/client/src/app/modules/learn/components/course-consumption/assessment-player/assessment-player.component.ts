@@ -121,6 +121,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isDesktopApp= false;
   isConnected= true;
   isPiaAssessmentType:boolean;
+  attemptID: any;
   @HostListener('window:beforeunload')
   canDeactivate() {
     // returning true will navigate without confirmation
@@ -908,17 +909,24 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       if (this.activeContent.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
         if(this.activeContent.serverEvaluable){
+          this.attemptID = this.assessmentScoreService.generateHash();
           const requestBody = {
-            contentID: id,
-            collectionID: this.courseHierarchy.identifier, 
-            userID: this.userService._userid,
-            attemptID: uuid.v4(id)
+            request: {
+              questionset: {
+                contentID: id,
+                collectionID: this.courseHierarchy.identifier, 
+                userID: this.userService._userid,
+                attemptID: this.attemptID
+              }
+            }
           }
           this.publicPlayerService.getQuestionSetHierarchyByPost(requestBody).pipe(
             takeUntil(this.unsubscribe))
             .subscribe((response) => {
              this.updatePlayerWithResponse(response,id);
-              this.showLoader = false;
+             //Call below method for sending questionSetToken in content state update api if serverEvaluable is true
+             this.assessmentScoreService.setServerEvaluableFields(response.questionSet.serverEvaluable, response.questionSet.questionSetToken, this.attemptID)
+             this.showLoader = false;
             }, (err) => {
               this.toasterService.error(this.resourceService.messages.stmsg.m0009);
               this.showLoader = false;
