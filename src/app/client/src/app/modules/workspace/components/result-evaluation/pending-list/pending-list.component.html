@@ -17,6 +17,7 @@
             <th class="two wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.positionAndCompetency }}</th> -->
             <th class="one wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.date }}</th>
             <th class="two wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.nodalFeedback }}</th>
+            <th class="two wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.adminFeedback }}</th>
             <th class="two wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.nodalDetails }}</th>
             <th class="one wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.result }}</th>
             <th class="one wide UpReviewTableHeader">{{ resourceService?.frmelmnts?.lbl?.header?.status }}</th>
@@ -45,7 +46,10 @@
                 <div>{{ (student?.assessmentInfo && student?.assessmentInfo?.status >= 2) ? (student?.assessmentInfo?.dateTime | dateFormat) : 'Not Attempted' }}</div>
             </td>
             <td>
-                <div matTooltip="{{student?.assessmentInfo?.comment}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment}}</div>
+                <div matTooltip="{{student?.assessmentInfo?.comment}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}</div>
+            </td>
+            <td>
+                <div matTooltip="{{student?.assessmentInfo?.comment}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.ORG_ADMIN}}</div>
             </td>
             <td>
                 <div>{{student?.assessmentInfo?.addedBy}}</div>

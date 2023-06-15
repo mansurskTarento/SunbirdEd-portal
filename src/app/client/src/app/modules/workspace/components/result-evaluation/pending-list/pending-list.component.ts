@@ -573,7 +573,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     userIds.forEach(ids=>{
                         if(student.id == ids){
                           student.assessmentInfo.status  = 5;
-                          student.assessmentInfo.comment =requestBody.request['comment']
+                          student.assessmentInfo.comment.ORG_ADMIN =requestBody.request['comment']
                           student.checked = false;
                         }
                     });
