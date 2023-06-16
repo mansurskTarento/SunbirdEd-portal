@@ -46,10 +46,10 @@
                 <div>{{ (student?.assessmentInfo && student?.assessmentInfo?.status >= 2) ? (student?.assessmentInfo?.dateTime | dateFormat) : 'Not Attempted' }}</div>
             </td>
             <td>
-                <div matTooltip="{{student?.assessmentInfo?.comment}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}</div>
+                <div matTooltip="{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}</div>
             </td>
             <td>
-                <div matTooltip="{{student?.assessmentInfo?.comment}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.ORG_ADMIN}}</div>
+                <div matTooltip="{{student?.assessmentInfo?.comment?.ORG_ADMIN}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.ORG_ADMIN}}</div>
             </td>
             <td>
                 <div>{{student?.assessmentInfo?.addedBy}}</div>
