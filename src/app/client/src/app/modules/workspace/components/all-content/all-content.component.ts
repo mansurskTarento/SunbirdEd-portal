@@ -256,7 +256,10 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
         }
         this.queryParams = bothParams.queryParams;
         this.query = this.queryParams['query'];
-        this.fecthAllContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+        setTimeout(()=>{                           // <<<---using ()=> syntax
+          this.fecthAllContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+      }, 2000);
+       
       });
 
     this.workSpaceService.workspaceSearchLabelConfig$.subscribe((searchLabelConfig) => {
