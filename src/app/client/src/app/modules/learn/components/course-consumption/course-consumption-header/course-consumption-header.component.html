@@ -110,7 +110,7 @@
               </div>
             </div>
            </div>
-           <div class="w-100 mt-16 mb-16">
+           <div class="w-100 mt-16 mb-16" *ngIf="courseHierarchy.primaryCategory !== 'PIAA Assessment'">
             <button tabindex="0" (click)="onShareLink();sharelinkModal=true;"
             class="sb-btn sb-btn-normal sb-btn-outline-primary d-flex w-100 flex-ai-jc-center flex-ai-center">
             <i class="icon-svg icon-svg--xs icon-share mr-8"><svg class="icon icon-svg--primary">
