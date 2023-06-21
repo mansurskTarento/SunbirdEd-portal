@@ -313,6 +313,7 @@ export class AssessmentsListComponent extends WorkSpace implements OnInit, After
             .subscribe((data: ServerResponse) => {
                 if (data.result.count && (!_.isEmpty(data.result.content) || (!_.isEmpty(data.result.content)))) {
                     this.allAssessments = data.result.content;
+                    this.allAssessments = this.allAssessments.filter(data=>data['batches'] )
                     this.totalCount = data.result.count;
                     this.pager = this.paginationService.getPager(data.result.count, pageNumber, limit);
                     this.showLoader = false;
