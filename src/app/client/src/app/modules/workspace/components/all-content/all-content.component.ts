@@ -296,7 +296,7 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
         se_subjects: bothParams.queryParams.subject,
         se_mediums: bothParams.queryParams.medium,
         se_gradeLevels: bothParams.queryParams.gradeLevel,
-        se_difficultyLevels: bothParams.queryParams.difficultyLevel ? bothParams.queryParams.difficultyLevel:''
+        se_difficultyLevels: bothParams.queryParams.difficultyLevel
       },
       limit: limit,
       offset: (pageNumber - 1) * (limit),
