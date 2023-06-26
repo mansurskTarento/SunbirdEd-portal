@@ -925,7 +925,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .subscribe((response) => {
              this.updatePlayerWithResponse(response,id);
              //Call below method for sending questionSetToken in content state update api if serverEvaluable is true
-             this.assessmentScoreService.setServerEvaluableFields(response.questionSet.serverEvaluable, response.questionSet.questionSetToken, this.attemptID)
+             let questionSetEvaluable = response.questionSet?.eval?.mode?.toLowerCase() == 'server';
+             this.assessmentScoreService.setServerEvaluableFields(questionSetEvaluable, response.questionSet.questionSetToken, this.attemptID)
              this.showLoader = false;
             }, (err) => {
               this.toasterService.error(this.resourceService.messages.stmsg.m0009);
