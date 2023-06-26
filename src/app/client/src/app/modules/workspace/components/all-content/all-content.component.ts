@@ -256,7 +256,10 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
         }
         this.queryParams = bothParams.queryParams;
         this.query = this.queryParams['query'];
-        this.fecthAllContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+        setTimeout(()=>{                           // <<<---using ()=> syntax
+          this.fecthAllContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+      }, 2000);
+       
       });
 
     this.workSpaceService.workspaceSearchLabelConfig$.subscribe((searchLabelConfig) => {
@@ -289,10 +292,11 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
         createdBy: this.userService.userid,
         // tslint:disable-next-line:max-line-length
         primaryCategory: _.get(bothParams, 'queryParams.primaryCategory') || (!_.isEmpty(primaryCategories) ? primaryCategories : this.config.appConfig.WORKSPACE.primaryCategory),
-        board: bothParams.queryParams.board,
-        subject: bothParams.queryParams.subject,
-        medium: bothParams.queryParams.medium,
-        gradeLevel: bothParams.queryParams.gradeLevel
+        se_boards: bothParams.queryParams.board,
+        se_subjects: bothParams.queryParams.subject,
+        se_mediums: bothParams.queryParams.medium,
+        se_gradeLevels: bothParams.queryParams.gradeLevel,
+        se_difficultyLevels: bothParams.queryParams.difficultyLevel
       },
       limit: limit,
       offset: (pageNumber - 1) * (limit),
