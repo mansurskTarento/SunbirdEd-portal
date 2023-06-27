@@ -215,7 +215,8 @@
       "GET_PARTICIPANT_LIST": "course/v1/batch/participants/list",
       "GET_BATCH_PARTICIPANT_LIST":"course/v1/batch/admin/participants/list",
       "GET_BATCHS": "course/v1/batch/list",
-      "REMOVE_USERS": "course/v1/batch/user/remove"
+      "REMOVE_USERS": "course/v1/batch/user/remove",
+      "GET_CANDIDATE_LIST":"course/v1/course/user/list"
     },
     "ADMIN": {
       "USER_SEARCH": "user/v3/search",

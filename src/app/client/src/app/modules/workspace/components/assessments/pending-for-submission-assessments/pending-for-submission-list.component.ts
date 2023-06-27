@@ -283,7 +283,12 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                 }
                 this.queryParams = bothParams.queryParams;
                 this.query = this.queryParams['query'];
-                this.getParticipantsList(bothParams);                
+                if(this.query){
+                    this.searchParticpantList(this.query)
+                }
+                else{
+                    this.getParticipantsList(bothParams);    
+                }                            
             });
     }
 
@@ -312,7 +317,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "batchId": this.batchID
                 },
                 "filters": {
-                    "status": [],
+                    "status": [2,3],
                     "enrolled_date": ""
                 },
                 "sort_by": {
@@ -321,17 +326,48 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
             }
         };
 
-        this.courseBatchService.getbatchParticipantList(batchDetails)
+        this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.participantsList = data;
-                this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+                //this.participantsList = data;
+                this.allStudents = data
+             //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
                 this.noResult = false;
                 this.showError = true;
                 this.toasterService.error(this.resourceService.messages.fmsg.m0081);
             });
+    }
+
+
+    /**
+     * This method is used Search Particpant list
+     */
+    searchParticpantList(query){
+     const searchDetails = {
+        "request": {
+            "batch": {
+                "batchId": this.batchID
+            },
+            "filters": {
+              "search": true,
+              "username":query
+            },
+        }
+     };
+     this.courseBatchService.getCandidateListApi(searchDetails)
+     .pipe(takeUntil(this.destroySubject$))
+     .subscribe((data) => {
+         //this.participantsList = data;
+         this.allStudents = data
+      //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+     }, (err: ServerResponse) => {
+         this.showLoader = false;
+         this.noResult = false;
+         this.showError = true;
+         this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+     });
     }
 
     /**
