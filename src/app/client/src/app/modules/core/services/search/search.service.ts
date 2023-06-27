@@ -559,6 +559,12 @@ export class SearchService {
             facet['label'] =  this.resourceService.frmelmnts.lbl.userType;
             facet['placeholder'] =  this.resourceService.frmelmnts.lbl.selectMeantFor;
             break;
+        case 'se_difficultyLevels':
+          case 'difficultyLevel':
+            facet['index'] = '6';
+            facet['label'] = this.resourceService.frmelmnts.lbl.difficultyLevel;
+            facet['placeholder'] = this.resourceService.frmelmnts.lbl.selectDifficultyLevel;
+            break;
         case 'channel':
           facet['index'] = '1';
           facet['label'] = _.get(this.resourceService, 'frmelmnts.lbl.orgname');
