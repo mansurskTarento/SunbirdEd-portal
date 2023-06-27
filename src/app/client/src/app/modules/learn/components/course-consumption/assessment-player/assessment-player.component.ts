@@ -908,7 +908,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }
       if (this.activeContent.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
-        if(this.activeContent.serverEvaluable){
+        if(this.activeContent?.eval?.mode?.toLowerCase() == 'server'){
           this.attemptID = this.assessmentScoreService.generateHash();
           const requestBody = {
             request: {
