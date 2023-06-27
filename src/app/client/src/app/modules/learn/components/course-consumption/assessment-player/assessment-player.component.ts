@@ -908,7 +908,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }
       if (this.activeContent.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
-        if(this.activeContent.serverEvaluable){
+        if(this.activeContent?.eval?.mode?.toLowerCase() == 'server'){
           this.attemptID = this.assessmentScoreService.generateHash();
           const requestBody = {
             request: {
@@ -925,7 +925,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .subscribe((response) => {
              this.updatePlayerWithResponse(response,id);
              //Call below method for sending questionSetToken in content state update api if serverEvaluable is true
-             this.assessmentScoreService.setServerEvaluableFields(response.questionSet.serverEvaluable, response.questionSet.questionSetToken, this.attemptID)
+             let questionSetEvaluable = response.questionSet?.eval?.mode?.toLowerCase() == 'server';
+             this.assessmentScoreService.setServerEvaluableFields(questionSetEvaluable, response.questionSet.questionSetToken, this.attemptID)
              this.showLoader = false;
             }, (err) => {
               this.toasterService.error(this.resourceService.messages.stmsg.m0009);

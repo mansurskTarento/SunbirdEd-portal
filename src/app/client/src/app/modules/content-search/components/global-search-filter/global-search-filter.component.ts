@@ -28,7 +28,7 @@ import { CacheService } from 'ng2-cache-service';
 export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() facets;
   @Input() queryParamsToOmit;
-  @Input() supportedFilterAttributes = ['se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'primaryCategory', 'mediaType', 'additionalCategories', 'channel'];
+  @Input() supportedFilterAttributes = ['se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'primaryCategory', 'mediaType', 'additionalCategories', 'channel', 'se_difficultyLevels'];
   public filterLayout = LibraryFiltersLayout;
   public selectedMediaTypeIndex = 0;
   public selectedMediaType: string;
@@ -124,12 +124,12 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
     });
   }
 
-  public resetFilters() {
+  public resetFilters() { 
     this.selectedFilters = _.pick(this.selectedFilters, ['key', 'selectedTab']);
     if (this.utilService.isDesktopApp) {
       const userPreferences: any = this.userService.anonymousUserPreference;
       if (userPreferences) {
-        _.forEach(['board', 'medium', 'gradeLevel', 'channel'], (item) => {
+        _.forEach(['board', 'medium', 'gradeLevel', 'channel', 'difficultyLevel'], (item) => {
           if (!_.has(this.selectedFilters, item)) {
             this.selectedFilters[item] = _.isArray(userPreferences.framework[item]) ?
             userPreferences.framework[item] : _.split(userPreferences.framework[item], ', ');
@@ -160,7 +160,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
       map((queryParams) => {
         const queryFilters: any = {};
         _.forIn(queryParams, (value, key) => {
-          if (['medium', 'gradeLevel', 'board', 'channel', 'subject', 'subject', 'primaryCategory', 'key', 'mediaType', 'se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'additionalCategories'].includes(key)) {
+          if (['medium', 'gradeLevel', 'board', 'channel', 'subject', 'subject', 'primaryCategory', 'key', 'mediaType', 'se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'additionalCategories', 'se_difficultyLevels'].includes(key)) {
             queryFilters[key] = key === 'key' || _.isArray(value) ? value : [value];
           }
         });
@@ -295,7 +295,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
       queryParams: {
         ...(() => {
           const queryParams = _.cloneDeep(this.activatedRoute.snapshot.queryParams);
-          const queryFilters = [...this.supportedFilterAttributes, ...['board', 'medium', 'gradeLevel', 'channel']];
+          const queryFilters = [...this.supportedFilterAttributes, ...['board', 'medium', 'gradeLevel', 'channel', 'difficultyLevel']];
           queryFilters.forEach((attr) => delete queryParams[attr]);
           return queryParams;
         })()
