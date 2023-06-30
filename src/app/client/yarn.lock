@@ -14436,10 +14436,10 @@ uphrh-sb-themes@0.0.1:
   dependencies:
     "@project-sunbird/sb-styles" "0.0.14"
 
-upsmf-collection-editor@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/upsmf-collection-editor/-/upsmf-collection-editor-1.1.1.tgz#bb6acd59104e6455929ab4cb763f62254c59ec69"
-  integrity sha512-wV1Wt9/v77FR/B2pcG28jfak9KP7FOALEAb+8bsm4RMJJQxz8lk5dWpMWonchElx/cPCV5RYhAgcIo3HJmeTAA==
+upsmf-collection-editor@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/upsmf-collection-editor/-/upsmf-collection-editor-1.1.2.tgz#8117fd4e38e3d8ba704dfe45a020e660ecaba4bb"
+  integrity sha512-5v40t1/gthKdkLlBYz2WP7/Vrj8/QRxPd8PDRRsRQWWdrabIFB5a5UvMH5QHEUxbmo2KFyWU0cvm4UF32d5WmA==
   dependencies:
     tslib "^2.0.0"
 
