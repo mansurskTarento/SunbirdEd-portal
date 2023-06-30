@@ -122,6 +122,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isConnected= true;
   isPiaAssessmentType:boolean;
   attemptID: any;
+  courseEvaluable: any;
+  questionSetEvaluable: any;
   @HostListener('window:beforeunload')
   canDeactivate() {
     // returning true will navigate without confirmation
@@ -908,7 +910,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }
       if (this.activeContent.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
-        if(this.activeContent?.eval?.mode?.toLowerCase() == 'server'){
+        this.courseEvaluable = this.serverValidationCheck(this.activeContent?.eval);
+        if(this.courseEvaluable){
           this.attemptID = this.assessmentScoreService.generateHash();
           const requestBody = {
             request: {
@@ -922,11 +925,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           }
           this.publicPlayerService.getQuestionSetHierarchyByPost(requestBody).pipe(
             takeUntil(this.unsubscribe))
-            .subscribe((response) => {
+            .subscribe((response) => {             
+              //Call below method for sending questionSetToken in content state update api if eval mode is server
+              this.questionSetEvaluable = this.serverValidationCheck(response.questionSet?.eval);
+              this.assessmentScoreService.setServerEvaluableFields(this.questionSetEvaluable, response.questionSet.questionSetToken, this.attemptID);
              this.updatePlayerWithResponse(response,id);
-             //Call below method for sending questionSetToken in content state update api if serverEvaluable is true
-             let questionSetEvaluable = response.questionSet?.eval?.mode?.toLowerCase() == 'server';
-             this.assessmentScoreService.setServerEvaluableFields(questionSetEvaluable, response.questionSet.questionSetToken, this.attemptID)
              this.showLoader = false;
             }, (err) => {
               this.toasterService.error(this.resourceService.messages.stmsg.m0009);
@@ -936,6 +939,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           this.publicPlayerService.getQuestionSetHierarchy(id).pipe(
             takeUntil(this.unsubscribe))
             .subscribe((response) => {
+               this.questionSetEvaluable = this.serverValidationCheck(response.questionSet?.eval);
+               this.assessmentScoreService.setServerEvaluableFields(this.questionSetEvaluable, response.questionSet?.questionSetToken, '');
                this.updatePlayerWithResponse(response,id);
               this.showLoader = false;
             }, (err) => {
@@ -966,6 +971,16 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         });
       }
     }
+  }
+
+  serverValidationCheck(obj: any) {
+    if(typeof obj == 'string') {
+      this.questionSetEvaluable = JSON.parse(obj);
+      this.questionSetEvaluable = this.questionSetEvaluable?.mode?.toLowerCase() == 'server'
+    } else {
+      this.questionSetEvaluable = obj?.mode?.toLowerCase() == 'server'
+    }
+    return this.questionSetEvaluable;
   }
 
   onSelfAssessLastAttempt(event) {

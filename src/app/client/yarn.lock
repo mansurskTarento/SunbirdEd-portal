@@ -13670,10 +13670,10 @@ stylus@0.54.8:
     semver "^6.3.0"
     source-map "^0.7.3"
 
-sunbird-quml-player-exam@^5.3.0:
-  version "5.3.5"
-  resolved "https://registry.yarnpkg.com/sunbird-quml-player-exam/-/sunbird-quml-player-exam-5.3.5.tgz#5e3c52101ac0999cf9abd017d1925943b9714f69"
-  integrity sha512-6R24qW89FM8cbFJb8FF+ctaIjNd8BmUsUnRz49lnJz6QNtgU5FK0RyFLOqTMghFOqM9iOvS6f8qmaIRyZXfTzw==
+sunbird-quml-player-exam@^5.3.8:
+  version "5.3.8"
+  resolved "https://registry.yarnpkg.com/sunbird-quml-player-exam/-/sunbird-quml-player-exam-5.3.8.tgz#70219ac99f221b632bce1e028f57515cfb323311"
+  integrity sha512-bPi5iCjzndCojvOylPHyB+m4wEVeCMp2rUmzYaWk+JFe5UkF18maEsCP9s5uholxfGhSgpP7U+UMjgv97c6l+Q==
   dependencies:
     "@project-sunbird/sunbird-player-sdk-v9" "5.1.0"
     tslib "^2.2.0"
@@ -14436,10 +14436,10 @@ uphrh-sb-themes@0.0.1:
   dependencies:
     "@project-sunbird/sb-styles" "0.0.14"
 
-upsmf-collection-editor@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/upsmf-collection-editor/-/upsmf-collection-editor-1.0.8.tgz#a6c6336042fb35a90704ddb0a2517a23cdd094fc"
-  integrity sha512-jNTjTO/FJALWxgYHZ4ypsuAhWLBFlDrnB1Dmv6VN2Af4ygQuf7GdogT2neLLMaR9F/pxexfPtkTbtYugqWLqQg==
+upsmf-collection-editor@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/upsmf-collection-editor/-/upsmf-collection-editor-1.1.1.tgz#bb6acd59104e6455929ab4cb763f62254c59ec69"
+  integrity sha512-wV1Wt9/v77FR/B2pcG28jfak9KP7FOALEAb+8bsm4RMJJQxz8lk5dWpMWonchElx/cPCV5RYhAgcIo3HJmeTAA==
   dependencies:
     tslib "^2.0.0"
 

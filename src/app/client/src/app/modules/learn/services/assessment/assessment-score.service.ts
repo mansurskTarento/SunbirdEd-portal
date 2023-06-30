@@ -168,7 +168,6 @@ export class AssessmentScoreService {
       }
     };
     request.request = {...request.request, ...this.getServerEvaluableFields()}
-    console.log("new content state update payload",request);
     return request;
   }
 
