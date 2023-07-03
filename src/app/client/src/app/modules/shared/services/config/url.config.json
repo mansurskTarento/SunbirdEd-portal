@@ -126,6 +126,9 @@
       "USER_DECLARATION": "user/v1/declarations",
       "GET_SESSION": "get/user/sessionId"
     },
+    "LOGIN": {
+      "LOGIN": "v1/student/login"
+    },
     "CERTIFICATE": {
       "FETCH_CERTIFICATES": "v1/certs/search",
       "FETCH_USER": "v1/user/search",
