@@ -38,7 +38,10 @@ const routes: Routes = [
   },
   {
     path: 'guest-profile', loadChildren: () => import('./module/guest-profile/guest-profile.module').then(m => m.GuestProfileModule)
-  }
+  },
+  {
+    path: 'login', loadChildren: () => import('./module/login/login.module').then(m => m.LoginModule)
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
