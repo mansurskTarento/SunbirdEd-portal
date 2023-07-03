@@ -321,7 +321,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "enrolled_date": ""
                 },
                 "sort_by": {
-                    "dateTime": "desc"
+                    "enrolledDate": "desc"
                 }
             }
         };
