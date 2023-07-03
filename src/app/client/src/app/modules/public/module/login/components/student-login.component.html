@@ -1,0 +1,90 @@
+<!-- New Design code for Registration page -->
+
+<div class="layout">
+    <!-- <div class="left-panel">
+      <div class="image"><img alt={{tenantName}} src="{{secondaryLogo}}">
+      </div>
+    </div> -->
+  
+  
+    <div class="right-panel d-flex flex-dc">
+      <div class="login-content w-100 fix-bottom">
+        <div  class="ui container sb-header-ui-container">
+          <div  class="ui grid padded width-100">
+            <div  class="p-0 d-flex flex-ai-center two wide column" >
+              <a  aria-label="Navigate to Homepage" class="d-flex logo" role="link" tabindex="0" title="Niramaya">
+                <img  class="cursor-pointer" alt={{tenantName}}  src="{{logo}}">
+              </a>
+            </div>
+            <!-- <div  class="p-0 d-flex flex-jc-flex-end flex-ai-center ten wide column sb-header-list-items" >
+              <a  class="sb-btn sb-btn-primary p-8" >Register</a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="content-center-container">
+        <div class="content-center-block">
+            <div class="logo-content">
+                <div class="text-center mb-16">
+                    <img class="image centered" tabindex="0" aria-label="" alt={{tenantName}} height="56" src="{{logo}}">
+                    <h3 tabindex="0" class="sb-color-primary text-center font-weight-bold" >
+                      {{resourceService.frmelmnts.lbl.welcomeToInstance | interpolate:'{instance}': instance}}</h3>
+                  </div>
+                 
+              </div>
+    
+            <form [formGroup]="studentLoginForm" class="signup-form-content">
+
+                <!-- <h5 tabindex="0" *ngIf="telemetryImpression" [ngClass]="{'hide': routeParams?.loginMode == 'gmail','show':routeParams?.loginMode != 'gmail'}" [appTelemetryImpression]="telemetryImpression"
+                class="font-weight-bold text-center mb-24">
+                {{resourceService.frmelmnts.lbl.registerOn | interpolate:'{instance}': instance}}</h5> -->
+            
+                <div class="required mb-16">
+                    <label for="student-login-form-enroll-num" class="mb-8 font-weight-bold">
+                        {{resourceService.frmelmnts?.lbl?.enrollNumber}}<span class="sb-color-red">*</span>
+                    </label>
+                    
+                    <input id="student-login-form-enroll-num" class="sb-form-control"
+                        [ngClass]="{'orange-border': studentLoginForm.controls.enrollmentNumber.touched && studentLoginForm.controls['enrollmentNumber'].errors}"
+                        formControlName="enrollmentNumber" type="text" name="enrollmentNumber" autocomplete="off" aria-required="true" placeholder="{{resourceService.frmelmnts?.intxt?.enterEnrollNumber}}" />
+                    
+                    <div class="sb-color-red pt-0" aria-describedby="student-login-form-enroll-num" tabindex="0" aria-label="enter enrollment Number" *ngIf="studentLoginForm.controls.enrollmentNumber.touched && studentLoginForm.controls['enrollmentNumber'].errors && studentLoginForm.controls['enrollmentNumber'].errors.required">{{resourceService.frmelmnts?.lbl?.enterEnrollNumber}}</div>
+                </div>
+            
+                <div class="dob mb-16 required">
+                    <label for="student-login-form-dob" class="mb-8 font-weight-bold">{{resourceService.frmelmnts?.lbl?.dob}}<span class="sb-color-red">*</span></label> 
+                    <div>
+                      <mat-form-field appearance="fill" class="sb-mat__datepicker sb-mat__datepicker--nolabel">
+                        <input matInput
+                          [matDatepicker]="dob" formControlName="dob"
+                          >
+                        <mat-datepicker-toggle matSuffix [for]="dob">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dob></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div class="sb-color-red pt-0" aria-describedby="student-login-form-dob" tabindex="0" [attr.aria-label]="resourceService.frmelmnts?.lbl?.dob" *ngIf="studentLoginForm.controls.dob.touched  && studentLoginForm.controls['dob'].errors && studentLoginForm.controls['dob'].errors.required">{{resourceService.frmelmnts?.lbl?.dob}}</div>
+                </div>
+                <button type="submit" 
+                    disabled="!studentLoginForm.valid"
+                    [ngClass]="{'sb-btn-disabled':!studentLoginForm.valid, 'sb-btn-primary':studentLoginForm.valid}"
+                    class="sb-btn sb-btn-sm text-uppercase width-100 mt-16  flex-basis-1" tabindex="0" (click)="login()"><span>{{resourceService.frmelmnts.btn.login}}</span>
+                </button>
+            </form>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
