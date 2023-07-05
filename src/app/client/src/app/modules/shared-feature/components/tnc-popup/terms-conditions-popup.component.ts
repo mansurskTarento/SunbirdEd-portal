@@ -74,7 +74,8 @@ export class TermsAndConditionsPopupComponent implements OnInit, OnDestroy {
   public onSubmitTnc(modalId: string) {
     const requestBody = {
       request: {
-        version: _.get(this.userProfile, 'tncLatestVersion')
+        version: _.get(this.userProfile, 'tncLatestVersion'),
+        userId :this.userService.userid
       }
     };
     if (_.get(this.userService, 'userProfile.managedBy')) {
