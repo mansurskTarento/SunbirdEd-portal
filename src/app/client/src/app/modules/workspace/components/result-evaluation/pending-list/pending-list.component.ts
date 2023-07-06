@@ -266,7 +266,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id;
+            this.batchID = params.id.toString();
           });
 
         this.filterType = this.config.appConfig.allmycontent.filterType;
