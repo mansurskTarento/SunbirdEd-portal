@@ -320,9 +320,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                "batch": {
-                    "batchId": this.batchID
-                },
+                    "batchId": this.batchID,
+                
                 "filters": {
                     "status": [2,3],
                     "enrolled_date": this.enrolledDate

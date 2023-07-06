@@ -326,9 +326,8 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                "batch": {
-                    "batchId": this.batchID ? this.batchID : this.assessment.batches[0].batchId
-                },
+                    "batchId": this.batchID ? this.batchID : this.assessment.batches[0].batchId,
+                
                 "filters": {
                     "status": this.statusData,
                     "enrolled_date": this.enrolledDate

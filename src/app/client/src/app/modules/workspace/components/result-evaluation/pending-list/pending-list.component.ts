@@ -350,9 +350,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                "batch": {
-                    "batchId": this.batchID
-                },
+                    "batchId": this.batchID, 
                 "filters": {
                     "status": [3],
                     "enrolled_date": this.enrolledDate
