@@ -249,7 +249,7 @@ export class StudentsListComponent extends WorkSpace implements OnInit, AfterVie
         this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
 
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id;
+            this.batchID = params.id.toString();
           });
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
