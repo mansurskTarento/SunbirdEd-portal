@@ -28,12 +28,12 @@
         <tr in-view-item class="UpForReviewListHover" *ngFor="let student of allStudents let i = index;" [id]="i"
             [data]="student" appTelemetryInteract>
             <td tabindex="0">
-                <div class="UpReviewHeader">{{ student?.firstName | slice:0:30 }}
-                    <i *ngIf="student?.firstName?.length > 30">...</i>
+                <div class="UpReviewHeader">{{ student?.userName | slice:0:30 }}
+                    <i *ngIf="student?.userName?.length > 30">...</i>
                 </div>
             </td>
             <td>
-                <div>{{ (student?.assessmentInfo && student?.assessmentInfo?.status >= 2) ? (student?.assessmentInfo?.dateTime | dateFormat) : 'Not Attempted' }}</div>
+                <div>{{ (student && student?.status >= 2) ? (student?.enrolledDate | dateFormat) : 'Not Attempted' }}</div>
             </td>
             <!-- <td>
                 <div>{{ student?.userId }}</div>
@@ -42,7 +42,7 @@
                 <div>{{ (assessment?.se_boards) ? assessment?.se_boards[0] : 'NA' }}</div>
             </td> -->
             <td>
-                <div>{{(student?.assessmentInfo) ? getAssessmentStatus(student?.assessmentInfo?.status) : 'Not Assigned'}}</div>
+                <div>{{(student) ? getAssessmentStatus(student?.status) : 'Not Assigned'}}</div>
             </td>
             <td class="text-center">
                 <mat-checkbox (change)="handleCheckBoxChange($event, student)"  class="custom-select sb-mat__checkbox sb-mat__checkbox--primary" [checked]="student.checked" [disabled]="getDisableCheckboxFlag(student)"></mat-checkbox>

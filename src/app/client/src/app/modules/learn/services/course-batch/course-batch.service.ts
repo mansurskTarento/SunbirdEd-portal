@@ -242,4 +242,14 @@ export class CourseBatchService {
     return this.learnerService.post(option)
    }
 
+   getCandidateListApi(data) {
+    const options = {
+      url: this.configService.urlConFig.URLS.BATCH.GET_CANDIDATE_LIST,
+      data: data
+    };
+    return this.learnerService.post(options).pipe(map((response: any) => {
+      return _.get(response, 'result.batch.participants') || [];
+    }));
+  }
+
 }

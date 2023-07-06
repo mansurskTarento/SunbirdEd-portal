@@ -36,7 +36,7 @@
         <tr in-view-item class="UpForReviewListHover" *ngFor="let student of allStudents let i = index;" [id]="i"
             [data]="student" appTelemetryInteract>
             <td tabindex="0">
-                <div class="UpReviewHeader">{{ student?.firstName | slice:0:30 }}
+                <div class="UpReviewHeader">{{ student?.userName | slice:0:30 }}
                     <i *ngIf="student?.firstName?.length > 30">...</i>
                 </div>
             </td>
@@ -47,22 +47,22 @@
                 <div>NA</div>
             </td> -->
             <td>
-                <div>{{ (student?.assessmentInfo && student?.assessmentInfo?.status >= 2) ? (student?.assessmentInfo?.dateTime | dateFormat) : 'Not Attempted' }}</div>
+                <div>{{ (student && student?.status >= 2) ? (student?.enrolledDate | dateFormat) : 'Not Attempted' }}</div>
             </td>
             <td>
-                <div matTooltip="{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.NODAL_OFFICER}}</div>
+                <div matTooltip="{{student?.comment?.NODAL_OFFICER}}" [matTooltipPosition]="'right'">{{student?.comment?.NODAL_OFFICER}}</div>
             </td>
             <td>
-                <div matTooltip="{{student?.assessmentInfo?.comment?.ORG_ADMIN}}" [matTooltipPosition]="'right'">{{student?.assessmentInfo?.comment?.ORG_ADMIN}}</div>
+                <div matTooltip="{{student?.comment?.ORG_ADMIN}}" [matTooltipPosition]="'right'">{{student?.comment?.ORG_ADMIN}}</div>
             </td>
             <td>
-                <div>{{student?.assessmentInfo?.addedBy}}</div>
+                <div>{{student?.addedBy}}</div>
             </td>
             <td>
                 <div>NA</div>
             </td>
             <td>
-                <div>{{(student?.assessmentInfo) ? getStatusText(student) : 'Not Assigned'}}</div>
+                <div>{{(student) ? getStatusText(student) : 'Not Assigned'}}</div>
             </td>
             <td class="text-center">
                 <button class="ui default basic compact icon button"

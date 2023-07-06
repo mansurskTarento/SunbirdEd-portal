@@ -208,7 +208,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     *To store the selected student for submission or abort
     */
     selectedStudents: any[] = [];
-    maxCount:number = 250
+    maxCount:number = 250;
+    enrolledDate:any;
 
     /**
      * To show/hide collection modal
@@ -282,8 +283,19 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if (this.queryParams?.date) {
+                    this.enrolledDate =this.queryParams?.date.toString()
+                 }
+                 else {
+                    this.enrolledDate= ''
+                 }
                 this.query = this.queryParams['query'];
-                this.getParticipantsList(bothParams);                
+                if(this.query){
+                    this.searchParticpantList(this.query)
+                }
+                else{
+                    this.getParticipantsList(bothParams);    
+                }                            
             });
     }
 
@@ -312,26 +324,59 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "batchId": this.batchID
                 },
                 "filters": {
-                    "status": [],
-                    "enrolled_date": ""
+                    "status": [2,3],
+                    "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
-                    "dateTime": "desc"
+                    "enrolledDate": "desc"
                 }
             }
         };
 
-        this.courseBatchService.getbatchParticipantList(batchDetails)
+        this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.participantsList = data;
-                this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+                //this.participantsList = data;
+                this.allStudents = data
+                this.showLoader = false;
+             //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
                 this.noResult = false;
                 this.showError = true;
                 this.toasterService.error(this.resourceService.messages.fmsg.m0081);
             });
+    }
+
+
+    /**
+     * This method is used Search Particpant list
+     */
+    searchParticpantList(query){
+     const searchDetails = {
+        "request": {
+            "batch": {
+                "batchId": this.batchID
+            },
+            "filters": {
+              "search": true,
+              "username":query
+            },
+        }
+     };
+     this.courseBatchService.getCandidateListApi(searchDetails)
+     .pipe(takeUntil(this.destroySubject$))
+     .subscribe((data) => {
+         //this.participantsList = data;
+         this.allStudents = data;
+         this.showLoader = false;
+      //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+     }, (err: ServerResponse) => {
+         this.showLoader = false;
+         this.noResult = false;
+         this.showError = true;
+         this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+     });
     }
 
     /**

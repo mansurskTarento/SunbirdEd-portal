@@ -189,6 +189,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     isChecked: boolean = false;
     enableFeedback: boolean = false;
     batchID:any;
+    enrolledDate:any;
     /**
     *To store the flag to open issue or reject popup 
     */
@@ -282,8 +283,21 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if (this.queryParams?.date) {
+                   this.enrolledDate =this.queryParams?.date.toString()
+                }
+                else {
+                    this.enrolledDate = ''
+                }
+
                 this.query = this.queryParams['query'];
-                this.getParticipantsList(bothParams);                
+                if(this.query){
+                    this.searchParticpantList(this.query)
+                }
+                else {
+                    this.getParticipantsList(bothParams);
+                }
+                               
             });
     }
 
@@ -305,6 +319,34 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         });
     }
 
+    // getParticipantsList(bothParams): void {
+    //     const batchDetails = {
+    //         "request": {
+    //             "batch": {
+    //                 "batchId": this.batchID
+    //             },
+    //             "filters": {
+    //                 "status": [3],
+    //                 "enrolled_date": ""
+    //             },
+    //             "sort_by": {
+    //                 "dateTime": "desc"
+    //             }
+    //         }
+    //     };
+
+    //     this.courseBatchService.getbatchParticipantList(batchDetails)
+    //         .pipe(takeUntil(this.destroySubject$))
+    //         .subscribe((data) => {
+    //             this.participantsList = data;
+    //             this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+    //         }, (err: ServerResponse) => {
+    //             this.showLoader = false;
+    //             this.noResult = false;
+    //             this.showError = true;
+    //             this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+    //         });
+    // }
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
@@ -312,20 +354,22 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     "batchId": this.batchID
                 },
                 "filters": {
-                    "status": [],
-                    "enrolled_date": ""
+                    "status": [3],
+                    "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
-                    "dateTime": "desc"
+                    "enrolledDate": "desc"
                 }
             }
         };
 
-        this.courseBatchService.getbatchParticipantList(batchDetails)
+        this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.participantsList = data;
-                this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+               // this.participantsList = data;
+               this.allStudents = data
+               this.showLoader = false;
+                //this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
                 this.noResult = false;
@@ -333,6 +377,36 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                 this.toasterService.error(this.resourceService.messages.fmsg.m0081);
             });
     }
+
+     /**
+     * This method is use to Search Particpant list
+     */
+     searchParticpantList(query){
+        const searchDetails = {
+           "request": {
+               "batch": {
+                   "batchId": this.batchID
+               },
+               "filters": {
+                 "search": true,
+                 "username":query
+               },
+           }
+        };
+        this.courseBatchService.getCandidateListApi(searchDetails)
+        .pipe(takeUntil(this.destroySubject$))
+        .subscribe((data) => {
+            //this.participantsList = data;
+            this.allStudents = data
+            this.showLoader = false;
+           // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+        }, (err: ServerResponse) => {
+            this.showLoader = false;
+            this.noResult = false;
+            this.showError = true;
+            this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+        });
+       }
 
     /**
     * This method sets the make an api call to get all users with profileType as students with page No and offset
@@ -590,7 +664,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     getStatusText(student: any) {
         let statusText = '';
-        switch(student?.assessmentInfo?.status) {
+        switch(student?.status) {
             case 0: 
                 statusText= "Assigned";
                  break;
