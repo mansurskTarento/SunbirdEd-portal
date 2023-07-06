@@ -269,7 +269,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
         this.filterType = this.config.appConfig.allmycontent.filterType;
         this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id;
+            this.batchID = params.id.toString();
           });
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
