@@ -193,6 +193,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     batchID: any;
     statusList: any;
     statusData: any[] = [];
+    enrolledDate:any;
 
     /**
      * To show/hide collection modal
@@ -262,6 +263,12 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if (this.queryParams?.date) {
+                    this.enrolledDate =this.queryParams?.date.toString()
+                 }
+                 else {
+                    this.enrolledDate = ''
+                 }
                 if (this.queryParams?.status?.length) {
                     this.statusList = this.queryParams?.status;
                     
@@ -285,7 +292,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                   console.log(this.statusData)
                 }
                 else {
-                    this.statusData = [0, 4]
+                    this.statusData = [3,4,5]
                 }
                 this.query = this.queryParams['query'];
                 if(this.query){
@@ -324,7 +331,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                 },
                 "filters": {
                     "status": this.statusData,
-                    "enrolled_date": ""
+                    "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
                     "enrolledDate": "desc"

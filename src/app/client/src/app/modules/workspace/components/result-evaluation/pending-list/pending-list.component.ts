@@ -189,6 +189,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     isChecked: boolean = false;
     enableFeedback: boolean = false;
     batchID:any;
+    enrolledDate:any;
     /**
     *To store the flag to open issue or reject popup 
     */
@@ -282,6 +283,13 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if (this.queryParams?.date) {
+                   this.enrolledDate =this.queryParams?.date.toString()
+                }
+                else {
+                    this.enrolledDate = ''
+                }
+
                 this.query = this.queryParams['query'];
                 if(this.query){
                     this.searchParticpantList(this.query)
@@ -347,7 +355,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                 },
                 "filters": {
                     "status": [3],
-                    "enrolled_date": ""
+                    "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
                     "enrolledDate": "desc"

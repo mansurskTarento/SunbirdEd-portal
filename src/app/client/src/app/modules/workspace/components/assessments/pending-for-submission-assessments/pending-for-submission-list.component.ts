@@ -208,7 +208,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     *To store the selected student for submission or abort
     */
     selectedStudents: any[] = [];
-    maxCount:number = 250
+    maxCount:number = 250;
+    enrolledDate:any;
 
     /**
      * To show/hide collection modal
@@ -282,6 +283,12 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if (this.queryParams?.date) {
+                    this.enrolledDate =this.queryParams?.date.toString()
+                 }
+                 else {
+                    this.enrolledDate= ''
+                 }
                 this.query = this.queryParams['query'];
                 if(this.query){
                     this.searchParticpantList(this.query)
@@ -318,7 +325,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                 },
                 "filters": {
                     "status": [2,3],
-                    "enrolled_date": ""
+                    "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
                     "enrolledDate": "desc"
