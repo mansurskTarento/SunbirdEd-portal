@@ -263,7 +263,7 @@ export class StudentsListComponent extends WorkSpace implements OnInit, AfterVie
                 }
                 this.queryParams = bothParams.queryParams;
                 this.query = this.queryParams['query'];
-                this.getParticipantsList(bothParams);                
+                this.getParticipantsList(bothParams);  
             });
     }
 

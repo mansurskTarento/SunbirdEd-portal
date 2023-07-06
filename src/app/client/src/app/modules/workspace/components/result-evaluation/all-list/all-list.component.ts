@@ -179,9 +179,9 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     */
     public collectionData: Array<any>;
 
-     /**
-    *To store the assessment object   
-    */
+    /**
+   *To store the assessment object   
+   */
     assessment: any = {}
     participantsList: any[] = [];
     isChecked: boolean = false;
@@ -189,8 +189,10 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     feedbackText: string = '';
     disableAssessmentAction: boolean = true;
     checkedArray: string[] = [];
-    maxCount:number = 250
-    batchID:any;
+    maxCount: number = 250
+    batchID: any;
+    statusList: any;
+    statusData: any[] = [];
 
     /**
      * To show/hide collection modal
@@ -235,16 +237,17 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         this.resourceService = resourceService;
         this.config = config;
         this.state = 'allcontent';
+
         this.loaderMessage = {
             'loaderMessage': this.resourceService.messages.stmsg.m0110,
         };
-        this.sortingOptions = this.config.dropDownConfig.FILTER.RESOURCES.adminStudentsortingOptions;     
+        this.sortingOptions = this.config.dropDownConfig.FILTER.RESOURCES.adminStudentsortingOptions;
     }
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe((params) => {
             this.batchID = params.id;
-          });
+        });
 
         this.filterType = this.config.appConfig.allmycontent.filterType;
         this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
@@ -252,21 +255,46 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
             .pipe(
                 debounceTime(10),
-                map(([params, queryParams]) => ({ params, queryParams }) )
+                map(([params, queryParams]) => ({ params, queryParams }))
             )
             .subscribe(bothParams => {
                 if (bothParams.params.pageNumber) {
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
-                this.query = this.queryParams['query'];
-                if(this.query){
-                   this.searchParticpantList(this.query)
+                if (this.queryParams?.status?.length) {
+                    this.statusList = this.queryParams?.status;
+                    
+                    // Convert array to object
+                    let obj = {};
+                    for (let i = 0; i < this.statusList.length; i++) {
+                        obj[i] = this.statusList[i];
+                    }
+                    // Print the resulting object
+                    console.log(obj);
+                    // Assign numbers based on values
+                    this.statusData = Object.values(obj).map(value => {
+                        if (value === 'Certificate issued') {
+                            return 4;
+                        } else if (value === 'Certificate not issued') {
+                            return 5;
+                        } else if (value === 'Pending Evaluation') {
+                            return 3;
+                        }
+                    });
+                  console.log(this.statusData)
                 }
                 else {
-                    this.getParticipantsList(bothParams);  
+                    this.statusData = [0, 4]
                 }
-                              
+                this.query = this.queryParams['query'];
+                if(this.query){
+                    this.searchParticpantList(this.query)
+                }
+                else {
+                    this.getParticipantsList(bothParams);
+                }
+
             });
     }
 
@@ -295,11 +323,11 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                     "batchId": this.batchID ? this.batchID : this.assessment.batches[0].batchId
                 },
                 "filters": {
-                    "status": [3,4,5],
+                    "status": this.statusData,
                     "enrolled_date": ""
                 },
                 "sort_by": {
-                    "dateTime": "desc"
+                    "enrolledDate": "desc"
                 }
             }
         };
@@ -307,8 +335,10 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.participantsList = data;
-               // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+                this.allStudents = data;
+                console.log('asddd', this.allStudents)
+                this.showLoader = false;
+                // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
                 this.noResult = false;
@@ -317,33 +347,34 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
             });
     }
 
-     /**
-     * This method is use to Search Particpant list
-     */
-     searchParticpantList(query){
+    /**
+    * This method is use to Search Particpant list
+    */
+    searchParticpantList(query) {
         const searchDetails = {
-           "request": {
+            "request": {
                "batch": {
                    "batchId": this.batchID
                },
-               "filters": {
-                 "search": true,
-                 "username":query
-               },
-           }
+                "filters": {
+                    "search": true,
+                    "username": query
+                },
+            }
         };
         this.courseBatchService.getCandidateListApi(searchDetails)
-        .pipe(takeUntil(this.destroySubject$))
-        .subscribe((data) => {
-            this.participantsList = data;
-           // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
-        }, (err: ServerResponse) => {
-            this.showLoader = false;
-            this.noResult = false;
-            this.showError = true;
-            this.toasterService.error(this.resourceService.messages.fmsg.m0081);
-        });
-       }
+            .pipe(takeUntil(this.destroySubject$))
+            .subscribe((data) => {
+                this.allStudents = data;
+                this.showLoader = false;
+                // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+            }, (err: ServerResponse) => {
+                this.showLoader = false;
+                this.noResult = false;
+                this.showError = true;
+                this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+            });
+    }
 
     /**
     * This method sets the make an api call to get all users with profileType as students with page No and offset
@@ -358,15 +389,15 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
             const sortType = bothParams.queryParams.sortType;
             this.sort = {
                 [sort_by]: _.toString(sortType)
-            };  
+            };
         } else {
             this.sort = { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn };
         }
 
         const searchParams = {
             filters: {
-                "roles" : [],
-                "profileUserType.type" : "student"  
+                "roles": [],
+                "profileUserType.type": "student"
             },
             limit: limit,
             offset: (pageNumber - 1) * (limit),
@@ -382,9 +413,9 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                 if (data.result.response.count && !_.isEmpty(data.result.response.content)) {
                     this.allStudents = data.result.response.content;
                     this.allStudents.forEach((student) => {
-                        const assessmentInfo = _.find(this.participantsList, (participant) => {return participant.userId === student.id});
-                        if(assessmentInfo){
-                            student['assessmentInfo']  = assessmentInfo;
+                        const assessmentInfo = _.find(this.participantsList, (participant) => { return participant.userId === student.id });
+                        if (assessmentInfo) {
+                            student['assessmentInfo'] = assessmentInfo;
                         }
                     });
                     this.totalCount = data.result.response.count;
@@ -401,7 +432,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
                     // this.allStudents= _.filter(allStudents, (student) => { return student?.assessmentInfo  !== null });
                     // this.totalCount =  this.allStudents.length;
                     // this.pager = this.paginationService.getPager(this.totalCount, pageNumber, limit);
-                    
+
                     this.showLoader = false;
                     this.noResult = false;
                 } else {
@@ -436,11 +467,11 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         this.pageNumber = page;
         this.router.navigate(['workspace/content/resultEvaluation/all', this.pageNumber], { queryParams: this.queryParams });
         this.isChecked = false;
-        this.disableAssessmentAction = true;     
+        this.disableAssessmentAction = true;
     }
 
     goToScoreDetails() {
-        this.router.navigate(['workspace/content/resultEvaluation/score/1'],{state :{assessment: this.assessment, pageNumber: this.pageNumber},queryParams: { id:this.batchID }});
+        this.router.navigate(['workspace/content/resultEvaluation/score/1'], { state: { assessment: this.assessment, pageNumber: this.pageNumber }, queryParams: { id: this.batchID } });
     }
 
     inview(event) {
@@ -463,25 +494,25 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
 
     getStatusText(student: any) {
         let statusText = '';
-        switch(student?.status) {
-            case 0: 
-                statusText= "Assigned";
-                 break;
+        switch (student?.status) {
+            case 0:
+                statusText = "Assigned";
+                break;
             case 1:
-                statusText= "In progress";
+                statusText = "In progress";
                 break;
             case 2:
-                statusText= "Completed";
+                statusText = "Completed";
                 break;
             case 3:
-                statusText= "Pending for evaluation"; 
+                statusText = "Pending for evaluation";
                 break;
             case 4:
-                statusText= "Certificate issued";
-                 break; 
+                statusText = "Certificate issued";
+                break;
             case 5:
-                 statusText= "Certificate not issued";
-                 break;
+                statusText = "Certificate not issued";
+                break;
 
         }
         return statusText;

@@ -350,7 +350,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     "enrolled_date": ""
                 },
                 "sort_by": {
-                    "dateTime": "desc"
+                    "enrolledDate": "desc"
                 }
             }
         };
@@ -360,7 +360,8 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             .subscribe((data) => {
                // this.participantsList = data;
                this.allStudents = data
-                this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+               this.showLoader = false;
+                //this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
                 this.noResult = false;
@@ -389,6 +390,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         .subscribe((data) => {
             //this.participantsList = data;
             this.allStudents = data
+            this.showLoader = false;
            // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
         }, (err: ServerResponse) => {
             this.showLoader = false;

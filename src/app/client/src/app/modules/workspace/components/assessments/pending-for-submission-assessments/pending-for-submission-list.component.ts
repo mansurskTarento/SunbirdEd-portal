@@ -331,6 +331,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
             .subscribe((data) => {
                 //this.participantsList = data;
                 this.allStudents = data
+                this.showLoader = false;
              //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
@@ -360,7 +361,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
      .pipe(takeUntil(this.destroySubject$))
      .subscribe((data) => {
          //this.participantsList = data;
-         this.allStudents = data
+         this.allStudents = data;
+         this.showLoader = false;
       //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
      }, (err: ServerResponse) => {
          this.showLoader = false;

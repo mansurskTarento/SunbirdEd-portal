@@ -43,7 +43,7 @@
                 <div>NA</div>
             </td> -->
             <td>
-                <div>{{ (student && student?.status >= 2) ? (student?.dateTime | dateFormat) : 'Not Attempted' }}</div>
+                <div>{{ (student && student?.status >= 2) ? (student?.enrolledDate | dateFormat) : 'Not Attempted' }}</div>
             </td>
             <td>
                 <div matTooltip="{{student?.comment?.NODAL_OFFICER}}" [matTooltipPosition]="'right'">{{student?.comment?.NODAL_OFFICER}}</div>
