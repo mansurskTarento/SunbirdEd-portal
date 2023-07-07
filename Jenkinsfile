@@ -28,6 +28,7 @@ node('build-slave') {
                       sh """
                       git clone --recurse-submodules ${WL_Customization} sunbirded-portal
                       cp -r ${WORKSPACE}/sunbirded-portal/images/ ${WORKSPACE}/src/app/client/src/assets
+                      cp -r ${WORKSPACE}/sunbirded-portal/privacy/ ${WORKSPACE}/src/app/client/src/assets
                       cp -r ${WORKSPACE}/sunbirded-portal/resourceBundles/data/ ${WORKSPACE}/src/app/resourcebundles/
                       """
                     }

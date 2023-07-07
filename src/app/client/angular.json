@@ -20,6 +20,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets/images",
+              "src/assets/privacy",
               "src/assets/libs",
               "src/assets/cdnHelper.js",
               "src/assets/health-check.json",
