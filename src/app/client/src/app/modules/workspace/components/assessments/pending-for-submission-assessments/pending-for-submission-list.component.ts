@@ -581,7 +581,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
         };
         if(this.isAbortForm){
             const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
-                if (student&& student?.status < 2) {
+                if (student && student?.status < 2) {
                     return student.userId
                 };
             }));
