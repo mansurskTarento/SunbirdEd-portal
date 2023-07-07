@@ -354,9 +354,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     searchParticpantList(query){
      const searchDetails = {
         "request": {
-            "batch": {
-                "batchId": this.batchID
-            },
+            "batchId": this.batchID,
             "filters": {
               "search": true,
               "username":query

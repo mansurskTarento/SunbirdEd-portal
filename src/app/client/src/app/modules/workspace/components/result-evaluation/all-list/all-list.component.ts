@@ -359,9 +359,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     searchParticpantList(query) {
         const searchDetails = {
             "request": {
-               "batch": {
-                   "batchId": this.batchID
-               },
+                "batchId": this.batchID,
                 "filters": {
                     "search": true,
                     "username": query
