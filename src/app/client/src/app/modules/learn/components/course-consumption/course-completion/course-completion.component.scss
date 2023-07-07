@@ -21,3 +21,10 @@
     color: var(--black);
   }
 }
+
+::ng-deep {
+  .cdk-overlay-pane .sb-mat__modal .close-btn::after {
+    color: black !important;
+  }
+}
+//.sb-mat__modal.sb-mat__modal--course-complete .close-btn
