@@ -382,9 +382,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
      searchParticpantList(query){
         const searchDetails = {
            "request": {
-               "batch": {
-                   "batchId": this.batchID
-               },
+               "batchId": this.batchID,
                "filters": {
                  "search": true,
                  "username":query
