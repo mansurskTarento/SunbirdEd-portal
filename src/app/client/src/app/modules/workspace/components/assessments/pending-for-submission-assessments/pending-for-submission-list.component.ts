@@ -210,6 +210,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     selectedStudents: any[] = [];
     maxCount:number = 250;
     enrolledDate:any;
+    sorting:any
 
     /**
      * To show/hide collection modal
@@ -283,6 +284,12 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
+                if(this.queryParams?.sortType){
+                  this.sorting =this.queryParams?.sortType.toString()
+                }
+                else {
+                    this.sorting= 'desc'
+                }
                 if (this.queryParams?.date) {
                     this.enrolledDate =this.queryParams?.date.toString()
                  }
@@ -327,7 +334,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
-                    "enrolledDate": "desc"
+                    "enrolledDate": this.sorting
                 }
             }
         };
