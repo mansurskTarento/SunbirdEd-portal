@@ -365,7 +365,10 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
                // this.participantsList = data;
-               this.allStudents = data
+               this.allStudents = data;
+               this.allStudents.forEach((student)=>{
+                student['checked'] = false;
+               })
                this.showLoader = false;
                 //this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
@@ -528,13 +531,13 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     }
 
     handleCheckBoxChange($event: MatCheckboxChange, studentObj?: any) {
-        if (studentObj?.id) {
+        if (studentObj?.userId) {
             this.checkUncheck($event, studentObj);
             return;
         }
         
         this.allStudents.forEach((student) => {
-            if(student?.assessmentInfo && student?.assessmentInfo?.status === 3) {
+            if(student && student?.status === 3) {
                 this.checkUncheck($event, student);
             }   
         })
@@ -549,8 +552,8 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             this.shiftUnShiftArray('pop', obj);
         }
 
-        const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student?.assessmentInfo != null});
-        const studentsWithStatusPendingForEval = _.filter(studentsWithAssessmentInfo, (student)  => {return student?.assessmentInfo?.status === 3});
+      // const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student?.assessmentInfo != null});
+        const studentsWithStatusPendingForEval = _.filter(this.selectedStudents, (student)  => {return student?.status === 3});
         if(studentsWithStatusPendingForEval.length > 0) {
             this.disableIssueCertificateAction = false;
             this.disableRejectCertificateAction = false;
@@ -562,11 +565,11 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     shiftUnShiftArray(flag: string, obj: any): void {
         if (flag === 'push') {
-            if (_.findIndex(this.selectedStudents,  {id: obj.id}) === -1) {
+            if (_.findIndex(this.selectedStudents,  {userId: obj.userId}) === -1) {
                 this.selectedStudents.push(obj);
             }
         } else {
-            this.selectedStudents.splice(_.findIndex(this.selectedStudents,  {id: obj.id}), 1); 
+            this.selectedStudents.splice(_.findIndex(this.selectedStudents,  {userId: obj.userId}), 1); 
         }
     }
 
@@ -591,8 +594,8 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     handleSubmitData(modal?): void {
         const batch = this.assessment.batches[0];
         const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
-            if (student?.assessmentInfo  && student?.assessmentInfo?.status === 3) {
-                return student.id
+            if (student && student?.status === 3) {
+                return student.userId
             };
         }));
         let requestBody = {
@@ -606,6 +609,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         if(this.isIssueCertificate){
             this.courseBatchService.issueCertificate(requestBody).pipe(takeUntil(this.destroySubject$))
             .subscribe((res)=>{
+                this.toasterService.success(this.resourceService.messages.smsg.m00103 );
                 if(res){
                     requestBody.request.status = 4
                     this.courseBatchService.submitforEval(requestBody).pipe(takeUntil(this.destroySubject$))
@@ -616,11 +620,11 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                 this.disableRejectCertificateAction = true;
                 _.forEach(this.allStudents, (student) =>  {
                     userIds.forEach(ids=>{
-                        if(student.id == ids){
-                          student.assessmentInfo.status  = 4;
-                          student.assessmentInfo.certificates  = ["issued"];
+                        if(student.userId == ids){
+                          student.status  = 4;
+                          student.certificates  = ["issued"];
                         //   student.assessmentInfo.comment =requestBody.request['comment']
-                          student.checked = false;
+                          student['checked'] = false;
                         }
                     });
                 });
@@ -637,14 +641,15 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             this.courseBatchService.rejectCertificate(requestBody).pipe(takeUntil(this.destroySubject$))
             .subscribe((res)=>{
                 this.closeModal();
+                this.toasterService.success(this.resourceService.messages.smsg.m00103);
                 this.disableIssueCertificateAction = true;
                 this.disableRejectCertificateAction = true;
                 _.forEach(this.allStudents, (student) =>  {
                     userIds.forEach(ids=>{
-                        if(student.id == ids){
-                          student.assessmentInfo.status  = 5;
-                          student.assessmentInfo.comment.ORG_ADMIN =requestBody.request['comment']
-                          student.checked = false;
+                        if(student.userId == ids){
+                          student.status  = 5;
+                          student.comment.ORG_ADMIN =requestBody.request['comment']
+                          student['checked'] = false;
                         }
                     });
                 });
@@ -685,8 +690,8 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     getDisableCheckboxFlag(obj: any) {
         let disableFlag = true;
-        if(obj?.assessmentInfo){
-            if(obj?.assessmentInfo?.status === 3) {
+        if(obj){
+            if(obj?.status === 3) {
                 disableFlag =false;
             }
         } 

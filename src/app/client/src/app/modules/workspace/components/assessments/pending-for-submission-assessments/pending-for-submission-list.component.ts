@@ -323,7 +323,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "batchId": this.batchID,
                 
                 "filters": {
-                    "status": [2,3],
+                    "status": [1,2,3],
                     "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
@@ -337,6 +337,9 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
             .subscribe((data) => {
                 //this.participantsList = data;
                 this.allStudents = data
+                this.allStudents.forEach((students)=>{
+                    students['checked']= false;
+                })
                 this.showLoader = false;
              //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
@@ -490,13 +493,13 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     }
 
     handleCheckBoxChange($event: MatCheckboxChange, studentObj?: any) {
-        if (studentObj?.id) {
+        if (studentObj?.userId) {
             this.checkUncheck($event, studentObj);
             return;
         }
 
         this.allStudents.forEach((student) => {
-            if(student?.assessmentInfo && student?.assessmentInfo?.status < 3) {
+            if(student && student?.status < 3) {
                 this.checkUncheck($event, student);
             }
         });
@@ -511,9 +514,9 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
             this.shiftUnShiftArray('pop', obj);
         }
 
-        const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student?.assessmentInfo != null});
-        const studentsWithStatusBelowCompleted= _.filter(studentsWithAssessmentInfo, (student)  => {return student?.assessmentInfo?.status < 2});
-        const studentsWithStatusCompleted = _.filter(studentsWithAssessmentInfo, (student)  => {return student?.assessmentInfo?.status === 2});
+       // const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student!= null});
+        const studentsWithStatusBelowCompleted= _.filter(this.selectedStudents, (student)  => {return student?.status < 2});
+        const studentsWithStatusCompleted = _.filter(this.selectedStudents, (student)  => {return student?.status === 2});
         if(studentsWithStatusBelowCompleted.length > 0) {
             this.disableAbortAction = false;
         } else {
@@ -540,11 +543,11 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
 
     shiftUnShiftArray(flag: string, obj: any): void {
         if (flag === 'push') {
-            if (_.findIndex(this.selectedStudents,  {id: obj.id}) === -1) {
+            if (_.findIndex(this.selectedStudents,  {userId: obj.userId}) === -1) {
                 this.selectedStudents.push(obj);
             }
         } else {
-            this.selectedStudents.splice(_.findIndex(this.selectedStudents,  {id: obj.id}), 1); 
+            this.selectedStudents.splice(_.findIndex(this.selectedStudents,  {userId: obj.userId}), 1); 
         }
     }
 
@@ -578,8 +581,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
         };
         if(this.isAbortForm){
             const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
-                if (student?.assessmentInfo  && student?.assessmentInfo?.status < 2) {
-                    return student.id
+                if (student&& student?.status < 2) {
+                    return student.userId
                 };
             }));
             requestBody.request.userIds = userIds;
@@ -591,8 +594,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
               this.isChecked=false;
               _.forEach(this.allStudents, (student) =>  {
                 userIds.forEach(ids=>{
-                    if(student.id == ids){
-                      delete student.assessmentInfo;
+                    if(student.userId == ids){
+                    //  delete student.assessmentInfo;
                       student.checked = false;
                     }
                 });
@@ -606,8 +609,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
             });
         } else{
             const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
-                if (student?.assessmentInfo  && student?.assessmentInfo?.status === 2) {
-                    return student.id
+                if (student && student?.status === 2) {
+                    return student.userId
                 };  
             }));
             requestBody.request.userIds = userIds;
@@ -620,8 +623,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                 this.isChecked = false;
                 _.forEach(this.allStudents, (student) =>  {
                     userIds.forEach(ids=>{
-                        if(student.id == ids){
-                          student.assessmentInfo.status  = 3;
+                        if(student.userId == ids){
+                          student.status  = 3;
                           student.checked = false;
                         }
                     });
@@ -664,8 +667,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
 
     getDisableCheckboxFlag(obj: any) {
         let disableFlag = false;
-        if(obj?.assessmentInfo){
-            if(obj?.assessmentInfo?.status > 2) {
+        if(obj){
+            if(obj?.status > 2) {
                 disableFlag =true;
             }
         } else {
