@@ -210,6 +210,8 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     selectedStudents: any[] = [];
     maxCount:number = 250;
     enrolledDate:any;
+    statusList:any;
+    statusData: any[] = [];
 
     /**
      * To show/hide collection modal
@@ -289,6 +291,31 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                  else {
                     this.enrolledDate= ''
                  }
+                 if (this.queryParams?.status?.length) {
+                    this.statusList = this.queryParams?.status;
+                    
+                    // Convert array to object
+                    let obj = {};
+                    for (let i = 0; i < this.statusList.length; i++) {
+                        obj[i] = this.statusList[i];
+                    }
+                    // Print the resulting object
+                    console.log(obj);
+                    // Assign numbers based on values
+                    this.statusData = Object.values(obj).map(value => {
+                        if (value === 'In Progress') {
+                            return 1;
+                        } else if (value === 'Completed') {
+                            return 2;
+                        } else if (value === 'Sent For Evaluation') {
+                            return 3;
+                        }
+                    });
+                  console.log(this.statusData)
+                }
+                else {
+                    this.statusData = [1,2,3]
+                }
                 this.query = this.queryParams['query'];
                 if(this.query){
                     this.searchParticpantList(this.query)
@@ -323,7 +350,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                     "batchId": this.batchID,
                 
                 "filters": {
-                    "status": [1,2,3],
+                    "status": this.statusData,
                     "enrolled_date": this.enrolledDate
                 },
                 "sort_by": {
