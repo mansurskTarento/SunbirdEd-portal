@@ -1,0 +1,8 @@
+::ng-deep {
+    .sb-modal .ui.modal {
+     background: white !important;
+    }
+    .sb-btn-success, .sb-modal.sb-success .ui.modal .sb-modal-actions .sb-btn:nth-child(1){
+        color: white !important;
+    }
+}
