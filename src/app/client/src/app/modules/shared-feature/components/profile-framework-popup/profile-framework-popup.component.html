@@ -51,7 +51,7 @@
                       (+{{selectedOption[field.code].length - 1}} {{selectedOption[field.code]?.length === 2 ? 'other' : 'others'}})
                     </span>
                   </mat-select-trigger> -->
-                    <mat-option class="mat-dropdown__options" role="option" *ngFor="let option of field.range" [value]="option?.name"
+                    <mat-option class="mat-dropdown__options" role="option" *ngFor="let option of field.range | sortBy:'name':'asc'" [value]="option?.name"
                     attr.aria-label="{{option?.name}}">{{option?.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
