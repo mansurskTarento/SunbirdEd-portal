@@ -254,6 +254,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
       }
       const values = this.allValues[filterKey] = _.map(filterValues, 'name');
       if (_.get(values, 'length')) {
+        values.sort((a, b) => a.localeCompare(b));
         let selectedIndices;
         const filterValuesFromQueryParams = this.queryFilters[filterKey] || [];
         if (_.get(filterValuesFromQueryParams, 'length')) {
