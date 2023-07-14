@@ -268,7 +268,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id.toString();
+            this.batchID = params?.id?.toString();
           });
 
         this.filterType = this.config.appConfig.allmycontent.filterType;
@@ -358,7 +358,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                    "batchId": this.batchID, 
+                    "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId, 
                 "filters": {
                     "status": [3],
                     "enrolled_date": this.enrolledDate
@@ -393,10 +393,11 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
      searchParticpantList(query){
         const searchDetails = {
            "request": {
-               "batchId": this.batchID,
+               "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
                "filters": {
                  "search": true,
-                 "username":query
+                 "username":query,
+                 "status": [3]
                },
            }
         };
@@ -600,7 +601,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     }
 
     handleSubmitData(modal?): void {
-        const batch = this.assessment.batches[0];
+        const batch = this.assessment?.batches[0];
         const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
             if (student && student?.status === 3) {
                 return student.userId
@@ -608,7 +609,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         }));
         let requestBody = {
             request: {
-                batchId: batch?.batchId,
+                batchId: this.batchID ? this.batchID: batch?.batchId,
                 courseId: this.assessment?.identifier,
                 userIds: userIds,
                 status: null

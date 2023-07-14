@@ -289,7 +289,7 @@ export class StudentsListComponent extends WorkSpace implements OnInit, AfterVie
         const batchDetails = {
             "request": {
                 "batch": {
-                    "batchId": this.batchID
+                    "batchId": this.batchID ?  this.batchID : this.assessment?.batches[0]?.batchId
                 },
                 "filters": {
                     "status": [],
@@ -417,7 +417,7 @@ export class StudentsListComponent extends WorkSpace implements OnInit, AfterVie
     }
 
     handleAssignStudent(): void {
-        const batch = this.assessment.batches[0];
+        const batch = this.assessment?.batches[0];
         const userIds = _.compact(_.map(this.allStudents, (student) =>  {
             if (student.checked && !student['assessmentInfo']) {
                 return student.id
@@ -425,7 +425,7 @@ export class StudentsListComponent extends WorkSpace implements OnInit, AfterVie
         }))
         const requestBody = {
             request: {
-                batchId: batch?.batchId,
+                batchId: this.batchID ? this.batchID : batch?.batchId,
                 courseId: this.assessment?.identifier,
                 userIds: userIds
             }

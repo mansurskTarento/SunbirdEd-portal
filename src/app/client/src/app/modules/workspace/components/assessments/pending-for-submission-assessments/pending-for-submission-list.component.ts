@@ -273,7 +273,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
         this.filterType = this.config.appConfig.allmycontent.filterType;
         this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id.toString();
+            this.batchID = params?.id?.toString();
           });
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
@@ -354,7 +354,7 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                    "batchId": this.batchID,
+                    "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
                 
                 "filters": {
                     "status": this.statusData,
@@ -391,10 +391,11 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     searchParticpantList(query){
      const searchDetails = {
         "request": {
-            "batchId": this.batchID,
+            "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
             "filters": {
               "search": true,
-              "username":query
+              "username":query,
+              "status": [1,2,3]
             },
         }
      };
@@ -603,10 +604,10 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
     }
 
     handleSubmitData(): void {
-        const batch = this.assessment.batches[0];
+        const batch = this.assessment?.batches[0];
         let requestBody = {
             request: {
-                batchId: batch?.batchId,
+                batchId: this.batchID ? this.batchID : batch?.batchId,
                 courseId: this.assessment?.identifier,
                 userIds: [],
                 comment:this.feedbackForm.value.feedback,

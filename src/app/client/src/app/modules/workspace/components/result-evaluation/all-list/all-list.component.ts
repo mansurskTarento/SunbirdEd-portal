@@ -248,7 +248,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe((params) => {
-            this.batchID = params.id.toString();
+            this.batchID = params?.id?.toString();
           });
 
         this.filterType = this.config.appConfig.allmycontent.filterType;
@@ -333,7 +333,7 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                    "batchId": this.batchID ? this.batchID : this.assessment.batches[0].batchId,
+                    "batchId": this.batchID ? this.batchID : this.assessment?.batches[0].batchId,
                 
                 "filters": {
                     "status": this.statusData,
@@ -366,10 +366,11 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
     searchParticpantList(query) {
         const searchDetails = {
             "request": {
-                "batchId": this.batchID,
+                "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
                 "filters": {
                     "search": true,
-                    "username": query
+                    "username": query,
+                    "status": [3,4,5]
                 },
             }
         };
