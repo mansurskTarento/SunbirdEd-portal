@@ -45,7 +45,7 @@
               defaultSelectionText={{field.label}} zeroSelectionText={{resourceService.frmelmnts.lbl.Select}}
               class="ui selection dropdown multiple" [(ngModel)]="formInputData[field.code]" [options]="options"
               [hasLabels]="false" #multiSelect *ngIf="field.code === 'gradeLevel'">
-              <sui-select-option *ngFor="let option of field.range" [value]="option.name"></sui-select-option>
+              <sui-select-option *ngFor="let option of field.range | sortBy:'name':'asc'" [value]="option.name"></sui-select-option>
             </sui-multi-select>
 
           </div>
