@@ -65,8 +65,8 @@
           </div>
           <div  *ngIf="field.code ==='date'"  class="sb-field ui left icon input">
             <label>{{resourceService?.frmelmnts?.lbl.attemptedOn}}</label>
-            <input class="sb-form-control" placeholder={{resourceService?.frmelmnts?.lbl.attemptedOn}}   [(ngModel)]="formInputData[field.code]"
-              suiDatepicker  [pickerMode]="'date'">
+            <input class="sb-form-control" type="date"  placeholder={{resourceService?.frmelmnts?.lbl.attemptedOn}}   [(ngModel)]="formInputData[field.code]"
+              >
           </div>
         </div>
 
