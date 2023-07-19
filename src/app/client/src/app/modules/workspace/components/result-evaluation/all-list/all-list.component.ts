@@ -348,9 +348,19 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.allStudents = data;
-                console.log('asddd', this.allStudents)
+                if(data.length > 0 || (!_.isEmpty(data))){
+                    this.allStudents = data;
+                    this.showLoader = false;
+                    this.noResult = false;
+                }
+               else{
                 this.showLoader = false;
+                this.noResult = true;
+                this.showError = false;
+                this.noResultMessage = {
+                    'messageText': 'messages.stmsg.m0006'
+                };
+               }
                 // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
@@ -377,8 +387,20 @@ export class ResultEvalutionAllListComponent extends WorkSpace implements OnInit
         this.courseBatchService.getCandidateListApi(searchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-                this.allStudents = data;
-                this.showLoader = false;
+                if(data.length > 0 || (!_.isEmpty(data))){
+                    this.allStudents = data;
+                    this.showLoader = false;
+                    this.noResult = false;
+                }
+                else {
+                    this.showLoader = false;
+                    this.noResult = true;
+                    this.showError = false;
+                    this.noResultMessage = {
+                        'messageText': 'messages.stmsg.m0006'
+                    };
+                }
+               
                 // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;

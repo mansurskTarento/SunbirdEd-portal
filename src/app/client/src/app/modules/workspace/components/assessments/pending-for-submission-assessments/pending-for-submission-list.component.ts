@@ -365,16 +365,27 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
                 }
             }
         };
-
         this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
+                if(data.length > 0 || (!_.isEmpty(data))){
+                    this.allStudents = data
+                    this.allStudents.forEach((students)=>{
+                        students['checked']= false;
+                    })
+                    this.showLoader = false;
+                    this.noResult = false;
+                }
+                else {
+                    this.showLoader = false;
+                    this.noResult = true;
+                    this.showError = false;
+                    this.noResultMessage = {
+                        'messageText': 'messages.stmsg.m0006'
+                    };
+                }
                 //this.participantsList = data;
-                this.allStudents = data
-                this.allStudents.forEach((students)=>{
-                    students['checked']= false;
-                })
-                this.showLoader = false;
+                
              //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
@@ -402,9 +413,21 @@ export class PendingForSubmissionListComponent extends WorkSpace implements OnIn
      this.courseBatchService.getCandidateListApi(searchDetails)
      .pipe(takeUntil(this.destroySubject$))
      .subscribe((data) => {
+        if(data.length > 0 || (!_.isEmpty(data))){
+            this.allStudents = data;
+            this.showLoader = false;
+            this.noResult = false;
+        }
+        else {
+                   this.showLoader = false;
+                    this.noResult = true;
+                    this.showError = false;
+                    this.noResultMessage = {
+                        'messageText': 'messages.stmsg.m0006'
+                    };
+        }
          //this.participantsList = data;
-         this.allStudents = data;
-         this.showLoader = false;
+        
       //   this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
      }, (err: ServerResponse) => {
          this.showLoader = false;
