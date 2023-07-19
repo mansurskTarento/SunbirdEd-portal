@@ -32,7 +32,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     */
     state: string;
 
-    feedbackForm:FormGroup
+    feedbackForm: FormGroup
 
     /**
      * To send activatedRoute.snapshot to router navigation
@@ -188,13 +188,13 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     participantsList: any[] = [];
     isChecked: boolean = false;
     enableFeedback: boolean = false;
-    batchID:any;
-    enrolledDate:any;
+    batchID: any;
+    enrolledDate: any;
     /**
     *To store the flag to open issue or reject popup 
     */
     isIssueCertificate: boolean = true;
-    feedbackText: string= '';
+    feedbackText: string = '';
     /**
     *To store the flag to disable/enable not issue button
     */
@@ -209,8 +209,8 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     *To store the selected student for submission or abort
     */
     selectedStudents: any[] = [];
-    maxCount:number = 250
-    sorting:any;
+    maxCount: number = 250
+    sorting: any;
 
     /**
      * To show/hide collection modal
@@ -259,17 +259,17 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         this.loaderMessage = {
             'loaderMessage': this.resourceService.messages.stmsg.m0110,
         };
-        this.sortingOptions = this.config.dropDownConfig.FILTER.RESOURCES.adminPendingStudentsortingOptions;     
+        this.sortingOptions = this.config.dropDownConfig.FILTER.RESOURCES.adminPendingStudentsortingOptions;
 
         this.feedbackForm = new FormGroup({
-            feedback: new FormControl('',Validators.required),
-          });   
+            feedback: new FormControl('', Validators.required),
+        });
     }
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe((params) => {
             this.batchID = params?.id?.toString();
-          });
+        });
 
         this.filterType = this.config.appConfig.allmycontent.filterType;
         this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
@@ -277,35 +277,35 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
             .pipe(
                 debounceTime(10),
-                map(([params, queryParams]) => ({ params, queryParams }) )
+                map(([params, queryParams]) => ({ params, queryParams }))
             )
             .subscribe(bothParams => {
                 if (bothParams.params.pageNumber) {
                     this.pageNumber = Number(bothParams.params.pageNumber);
                 }
                 this.queryParams = bothParams.queryParams;
-                if(this.queryParams?.sortType){
-                    this.sorting =this.queryParams?.sortType.toString()
-                  }
-                  else {
-                      this.sorting= 'desc'
-                  }
+                if (this.queryParams?.sortType) {
+                    this.sorting = this.queryParams?.sortType.toString()
+                }
+                else {
+                    this.sorting = 'desc'
+                }
 
                 if (this.queryParams?.date) {
-                   this.enrolledDate =this.queryParams?.date.toString()
+                    this.enrolledDate = this.queryParams?.date.toString()
                 }
                 else {
                     this.enrolledDate = ''
                 }
 
                 this.query = this.queryParams['query'];
-                if(this.query){
+                if (this.query) {
                     this.searchParticpantList(this.query)
                 }
                 else {
                     this.getParticipantsList(bothParams);
                 }
-                               
+
             });
     }
 
@@ -358,7 +358,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     getParticipantsList(bothParams): void {
         const batchDetails = {
             "request": {
-                    "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId, 
+                "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
                 "filters": {
                     "status": [3],
                     "enrolled_date": this.enrolledDate
@@ -372,12 +372,25 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         this.courseBatchService.getCandidateListApi(batchDetails)
             .pipe(takeUntil(this.destroySubject$))
             .subscribe((data) => {
-               // this.participantsList = data;
-               this.allStudents = data;
-               this.allStudents.forEach((student)=>{
-                student['checked'] = false;
-               })
-               this.showLoader = false;
+                console.log(data)
+                if (data.length > 0 || (!_.isEmpty(data))) {
+                    this.allStudents = data;
+                    this.allStudents.forEach((student) => {
+                        student['checked'] = false;
+                    })
+                    this.showLoader = false;
+                    this.noResult = false;
+                }
+                else {
+                    this.showLoader = false;
+                    this.noResult = true;
+                    this.showError = false;
+                    this.noResultMessage = {
+                        'messageText': 'messages.stmsg.m0006'
+                    };
+                }
+                // this.participantsList = data;
+
                 //this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
             }, (err: ServerResponse) => {
                 this.showLoader = false;
@@ -387,34 +400,45 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             });
     }
 
-     /**
-     * This method is use to Search Particpant list
-     */
-     searchParticpantList(query){
+    /**
+    * This method is use to Search Particpant list
+    */
+    searchParticpantList(query) {
         const searchDetails = {
-           "request": {
-               "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
-               "filters": {
-                 "search": true,
-                 "username":query,
-                 "status": [3]
-               },
-           }
+            "request": {
+                "batchId": this.batchID ? this.batchID : this.assessment?.batches[0]?.batchId,
+                "filters": {
+                    "search": true,
+                    "username": query,
+                    "status": [3]
+                },
+            }
         };
         this.courseBatchService.getCandidateListApi(searchDetails)
-        .pipe(takeUntil(this.destroySubject$))
-        .subscribe((data) => {
-            //this.participantsList = data;
-            this.allStudents = data
-            this.showLoader = false;
-           // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
-        }, (err: ServerResponse) => {
-            this.showLoader = false;
-            this.noResult = false;
-            this.showError = true;
-            this.toasterService.error(this.resourceService.messages.fmsg.m0081);
-        });
-       }
+            .pipe(takeUntil(this.destroySubject$))
+            .subscribe((data) => {
+                //this.participantsList = data;
+                if (data.length > 0 || (!_.isEmpty(data))) {
+                    this.allStudents = data
+                    this.showLoader = false;
+                    this.noResult = false;
+                }
+                else {
+                    this.showLoader = false;
+                    this.noResult = true;
+                    this.showError = false;
+                    this.noResultMessage = {
+                        'messageText': 'messages.stmsg.m0006'
+                    };
+                }
+                // this.fecthAllContent(this.config.appConfig.WORKSPACE.ASSESSMENT.PAGE_LIMIT, this.pageNumber, bothParams);
+            }, (err: ServerResponse) => {
+                this.showLoader = false;
+                this.noResult = false;
+                this.showError = true;
+                this.toasterService.error(this.resourceService.messages.fmsg.m0081);
+            });
+    }
 
     /**
     * This method sets the make an api call to get all users with profileType as students with page No and offset
@@ -426,15 +450,15 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             const sortType = bothParams.queryParams.sortType;
             this.sort = {
                 [sort_by]: _.toString(sortType)
-            };  
+            };
         } else {
             this.sort = { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn };
         }
 
         const searchParams = {
             filters: {
-                "roles" : [],
-                "profileUserType.type" : "student"  
+                "roles": [],
+                "profileUserType.type": "student"
             },
             limit: limit,
             offset: (pageNumber - 1) * (limit),
@@ -450,9 +474,9 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                 if (data.result.response.count && !_.isEmpty(data.result.response.content)) {
                     this.allStudents = data.result.response.content;
                     this.allStudents.forEach((student) => {
-                        const assessmentInfo = _.find(this.participantsList, (participant) => {return participant.userId === student.id});
+                        const assessmentInfo = _.find(this.participantsList, (participant) => { return participant.userId === student.id });
                         student['checked'] = false;
-                        if(assessmentInfo){
+                        if (assessmentInfo) {
                             student['assessmentInfo'] = assessmentInfo;
                         }
                     });
@@ -469,7 +493,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
                     // this.allStudents= _.filter(allStudents, (student) => { return student?.assessmentInfo  !== null });
                     // this.totalCount =  this.allStudents.length;
                     // this.pager = this.paginationService.getPager(this.totalCount, pageNumber, limit);
-                    
+
                     this.showLoader = false;
                     this.noResult = false;
                 } else {
@@ -504,7 +528,7 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
         this.pageNumber = page;
         this.router.navigate(['workspace/content/resultEvaluation/pendingForEvaluation', this.pageNumber], { queryParams: this.queryParams });
         this.isChecked = false;
-        this.disableRejectCertificateAction = true;     
+        this.disableRejectCertificateAction = true;
     }
 
     inview(event) {
@@ -526,13 +550,13 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     }
 
 
-    handleKeyDown(event: KeyboardEvent){
-        if(this.maxCount == 0 && event.key !== 'Backspace' ){
-         event.preventDefault();
-         return
+    handleKeyDown(event: KeyboardEvent) {
+        if (this.maxCount == 0 && event.key !== 'Backspace') {
+            event.preventDefault();
+            return
         }
-        if(event.key === 'Backspace'){
-          this.maxCount = this.maxCount + 1
+        if (event.key === 'Backspace') {
+            this.maxCount = this.maxCount + 1
         }
         else {
             this.maxCount = this.maxCount - 1
@@ -544,11 +568,11 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             this.checkUncheck($event, studentObj);
             return;
         }
-        
+
         this.allStudents.forEach((student) => {
-            if(student && student?.status === 3) {
+            if (student && student?.status === 3) {
                 this.checkUncheck($event, student);
-            }   
+            }
         })
     }
 
@@ -561,9 +585,9 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
             this.shiftUnShiftArray('pop', obj);
         }
 
-      // const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student?.assessmentInfo != null});
-        const studentsWithStatusPendingForEval = _.filter(this.selectedStudents, (student)  => {return student?.status === 3});
-        if(studentsWithStatusPendingForEval.length > 0) {
+        // const studentsWithAssessmentInfo= _.filter(this.selectedStudents, (student)  => {return student?.assessmentInfo != null});
+        const studentsWithStatusPendingForEval = _.filter(this.selectedStudents, (student) => { return student?.status === 3 });
+        if (studentsWithStatusPendingForEval.length > 0) {
             this.disableIssueCertificateAction = false;
             this.disableRejectCertificateAction = false;
         } else {
@@ -574,11 +598,11 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
 
     shiftUnShiftArray(flag: string, obj: any): void {
         if (flag === 'push') {
-            if (_.findIndex(this.selectedStudents,  {userId: obj.userId}) === -1) {
+            if (_.findIndex(this.selectedStudents, { userId: obj.userId }) === -1) {
                 this.selectedStudents.push(obj);
             }
         } else {
-            this.selectedStudents.splice(_.findIndex(this.selectedStudents,  {userId: obj.userId}), 1); 
+            this.selectedStudents.splice(_.findIndex(this.selectedStudents, { userId: obj.userId }), 1);
         }
     }
 
@@ -588,122 +612,122 @@ export class ResultEvalutionPendingListComponent extends WorkSpace implements On
     }
 
     openFeedbackPopup(flag: string): void {
-        if(flag === 'issue'){
+        if (flag === 'issue') {
             // this.feedbackText = this.resourceService.frmelmnts.lbl.reasonToIssueCert;
-            this.isIssueCertificate =  true;
+            this.isIssueCertificate = true;
             this.handleSubmitData()
-        } else{
-            this.feedbackText =  this.resourceService.frmelmnts.lbl.reasonToNotIssueCert;
-            this.isIssueCertificate =  false;
+        } else {
+            this.feedbackText = this.resourceService.frmelmnts.lbl.reasonToNotIssueCert;
+            this.isIssueCertificate = false;
             this.enableFeedback = true;
         }
-       
+
     }
 
     handleSubmitData(modal?): void {
         const batch = this.assessment?.batches[0];
-        const userIds = _.compact(_.map(this.selectedStudents, (student) =>  {
+        const userIds = _.compact(_.map(this.selectedStudents, (student) => {
             if (student && student?.status === 3) {
                 return student.userId
             };
         }));
         let requestBody = {
             request: {
-                batchId: this.batchID ? this.batchID: batch?.batchId,
+                batchId: this.batchID ? this.batchID : batch?.batchId,
                 courseId: this.assessment?.identifier,
                 userIds: userIds,
                 status: null
             }
         };
-        if(this.isIssueCertificate){
+        if (this.isIssueCertificate) {
             this.courseBatchService.issueCertificate(requestBody).pipe(takeUntil(this.destroySubject$))
-            .subscribe((res)=>{
-                this.toasterService.success(this.resourceService.messages.smsg.m00103 );
-                if(res){
-                    requestBody.request.status = 4
-                    this.courseBatchService.submitforEval(requestBody).pipe(takeUntil(this.destroySubject$))
-                    .subscribe((res)=>{
-                    })
-                }
-                this.disableIssueCertificateAction = true;
-                this.disableRejectCertificateAction = true;
-                _.forEach(this.allStudents, (student) =>  {
-                    userIds.forEach(ids=>{
-                        if(student.userId == ids){
-                          student.status  = 4;
-                          student.certificates  = ["issued"];
-                        //   student.assessmentInfo.comment =requestBody.request['comment']
-                          student['checked'] = false;
-                        }
+                .subscribe((res) => {
+                    this.toasterService.success(this.resourceService.messages.smsg.m00103);
+                    if (res) {
+                        requestBody.request.status = 4
+                        this.courseBatchService.submitforEval(requestBody).pipe(takeUntil(this.destroySubject$))
+                            .subscribe((res) => {
+                            })
+                    }
+                    this.disableIssueCertificateAction = true;
+                    this.disableRejectCertificateAction = true;
+                    _.forEach(this.allStudents, (student) => {
+                        userIds.forEach(ids => {
+                            if (student.userId == ids) {
+                                student.status = 4;
+                                student.certificates = ["issued"];
+                                //   student.assessmentInfo.comment =requestBody.request['comment']
+                                student['checked'] = false;
+                            }
+                        });
                     });
+                }, (err) => {
+                    if (err.error && err.error.params && err.error.params.errmsg) {
+                        this.toasterService.error(err.error.params.errmsg);
+                    } else {
+                        this.toasterService.error(this.resourceService.messages.fmsg.m0103);
+                    }
                 });
-            },(err)=>{
-               if (err.error && err.error.params && err.error.params.errmsg) {
-                    this.toasterService.error(err.error.params.errmsg);
-               } else {
-                     this.toasterService.error(this.resourceService.messages.fmsg.m0103);
-               }
-            });
-        } else{
+        } else {
             requestBody.request['comment'] = this.feedbackForm.value.feedback;
             requestBody.request.status = 5
             this.courseBatchService.rejectCertificate(requestBody).pipe(takeUntil(this.destroySubject$))
-            .subscribe((res)=>{
-                this.closeModal();
-                this.toasterService.success(this.resourceService.messages.smsg.m00103);
-                this.disableIssueCertificateAction = true;
-                this.disableRejectCertificateAction = true;
-                _.forEach(this.allStudents, (student) =>  {
-                    userIds.forEach(ids=>{
-                        if(student.userId == ids){
-                          student.status  = 5;
-                          student.comment.ORG_ADMIN =requestBody.request['comment']
-                          student['checked'] = false;
-                        }
+                .subscribe((res) => {
+                    this.closeModal();
+                    this.toasterService.success(this.resourceService.messages.smsg.m00103);
+                    this.disableIssueCertificateAction = true;
+                    this.disableRejectCertificateAction = true;
+                    _.forEach(this.allStudents, (student) => {
+                        userIds.forEach(ids => {
+                            if (student.userId == ids) {
+                                student.status = 5;
+                                student.comment.ORG_ADMIN = requestBody.request['comment']
+                                student['checked'] = false;
+                            }
+                        });
                     });
+                }, (err) => {
+                    if (err.error && err.error.params && err.error.params.errmsg) {
+                        this.toasterService.error(err.error.params.errmsg);
+                    } else {
+                        this.toasterService.error(this.resourceService.messages.fmsg.m0103);
+                    }
                 });
-            },(err)=>{
-               if (err.error && err.error.params && err.error.params.errmsg) {
-                    this.toasterService.error(err.error.params.errmsg);
-               } else {
-                     this.toasterService.error(this.resourceService.messages.fmsg.m0103);
-               }
-            });
-        }   
+        }
     }
 
     getStatusText(student: any) {
         let statusText = '';
-        switch(student?.status) {
-            case 0: 
-                statusText= "Assigned";
-                 break;
+        switch (student?.status) {
+            case 0:
+                statusText = "Assigned";
+                break;
             case 1:
-                statusText= "In progress";
+                statusText = "In progress";
                 break;
             case 2:
-                statusText= "Completed";
+                statusText = "Completed";
                 break;
             case 3:
-                statusText= "Pending for evaluation"; 
+                statusText = "Pending for evaluation";
                 break;
             case 4:
-                 statusText= "Certificate issued";
-                break; 
-           case 5:
-            statusText= "Certificate not issued";
-            break;
+                statusText = "Certificate issued";
+                break;
+            case 5:
+                statusText = "Certificate not issued";
+                break;
         }
         return statusText;
     }
 
     getDisableCheckboxFlag(obj: any) {
         let disableFlag = true;
-        if(obj){
-            if(obj?.status === 3) {
-                disableFlag =false;
+        if (obj) {
+            if (obj?.status === 3) {
+                disableFlag = false;
             }
-        } 
+        }
         return disableFlag;
     }
 
