@@ -6,7 +6,7 @@
     <app-no-result [data]="noResultMessage"></app-no-result>
 </div>
 
-<h3 *ngIf="!showLoader">List of Assessments</h3>
+<h3 *ngIf="!showLoader && !noResult">List of Assessments</h3>
 <table class="ui upForReviewTable table" *ngIf="allAssessments?.length > 0 && !showLoader && !noResult ">
     <thead>
         <tr>
