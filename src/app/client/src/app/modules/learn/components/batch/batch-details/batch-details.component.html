@@ -66,7 +66,7 @@
               </div>
               <div class="batch-details__edit d-flex flex-ai-center py-8">
                 <div *ngIf="allowBatchCreation && allowCertCreation">
-                  <div *ngIf="!isCertAdded(batch)" class="sb-color-primary fnormal font-weight-bold">
+                  <div *ngIf="!isCertAdded(batch) && !isHideCert" class="sb-color-primary fnormal font-weight-bold">
                     <a href="javascript:void(0)" tabindex="0"
                       (click)="navigateToConfigureCertificate('add', batch?.identifier); logTelemetry('add-certificate')">{{resourceService?.frmelmnts?.cert?.lbl?.addCert}}</a>
                   </div>

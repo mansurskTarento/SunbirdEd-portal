@@ -67,6 +67,7 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
   showCompletionCertificate = false;
   showMeritCertificate = false;
   meritCertPercent = 0;
+  isHideCert:boolean = false;
 
   constructor(public resourceService: ResourceService, public permissionService: PermissionService,
     public userService: UserService, public courseBatchService: CourseBatchService, public toasterService: ToasterService,
@@ -102,6 +103,10 @@ export class BatchDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('courseHierarchy',_.get(this.courseHierarchy, 'primaryCategory'))
+    if(_.get(this.courseHierarchy, 'primaryCategory') === 'Self Assessment') {
+      this.isHideCert = true;
+    }
     this.isDesktopApp = this.userService.isDesktopApp;
     this.connectionService.monitor()
     .pipe(takeUntil(this.unsubscribe)).subscribe(isConnected => {
