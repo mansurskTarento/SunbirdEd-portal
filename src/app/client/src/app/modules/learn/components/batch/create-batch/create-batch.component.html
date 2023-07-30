@@ -33,7 +33,7 @@
             </div>
             <div class="sb-field-group">
               <div class="four wide column">
-                <div>
+                <div *ngIf="this.assessmentType !== 'self assessment'">
                   <label class="required text-uppercase">{{resourceService?.frmelmnts?.cert?.lbl?.issueCertificate}}</label>
                   <div class="d-flex py-8 flex-w-wrap">
                     <div class="sb-radio-btn-checkbox sb-radio-btn-primary">

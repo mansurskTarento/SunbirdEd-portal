@@ -33,7 +33,7 @@
               </div>
             </div>
             <div class="four wide column">
-              <div>
+              <div *ngIf="this.assessmentType !== 'self assessment'">
                 <label>{{resourceService?.frmelmnts?.cert?.lbl?.issueCertificate | uppercase}}</label>
                 <div class="d-flex py-8 flex-w-wrap">
                   <div class="sb-radio-btn-checkbox sb-radio-btn-primary">
