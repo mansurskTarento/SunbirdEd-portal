@@ -281,7 +281,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     filteredCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     this.enrolledCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     const { constantData, metaData, dynamicFields } = _.get(this.configService, 'appConfig.CoursePageSection.enrolledCourses');
-                    enrolledSection.contents = _.map(filteredCourses, content => {
+                   let formattedContents = _.map(filteredCourses, content => {
                         const formatedContent = this.utilService.processContent(content, constantData, dynamicFields, metaData);
                         formatedContent.metaData.mimeType = 'application/vnd.ekstep.content-collection';
                         formatedContent.metaData.contentType = _.get(content, 'content.primaryCategory') || _.get(content, 'content.contentType');
@@ -290,7 +290,24 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             formatedContent.metaData.trackable = trackableObj;
                         }
                         return formatedContent;
+                        // let currentPageData = this.getCurrentPageData();
+                        // let selectedTab = this.getSelectedTab();
+
+                        // if(formatedContent.primaryCategory === currentPageData.search.filters.primaryCategory[0] && selectedTab !== 'home'){
+
+                        //     return formatedContent;
+
+                        // }
+                       
                     });
+                    let selectedTab = this.getSelectedTab()
+                    if(selectedTab !=='home'){
+                        let currentPageData = this.getCurrentPageData();
+                        enrolledSection.contents = _.filter(formattedContents || [],{'primaryCategory':currentPageData.search.filters.primaryCategory[0]});
+                    }
+                    else {
+                        enrolledSection.contents = formattedContents;
+                    }
                     enrolledSection.count = enrolledSection.contents.length;
                     this.enrolledSection = enrolledSection;
                 }));
