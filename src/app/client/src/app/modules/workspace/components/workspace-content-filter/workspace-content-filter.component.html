@@ -2,9 +2,9 @@
   <div class="ui grid padded">
     <div class="seven wide column pt-0 pl-0">
       <div class="ui fluid icon input left action" id="search-input-container">
-        <div class="searchfilterinput ui search">
+        <div class="searchfilterinput ui search" id="filterInput">
           <div class="searchicon ui icon input ">
-            <input class="upForReviewSearchBox" type="text" name="filter_search" 
+            <input class="upForReviewSearchBox" type="text"  name="filter_search" 
               [(ngModel)]="query" (keyup)="keyup(query)"
               placeholder="{{resourceService?.frmelmnts?.prmpt?.searchContent}}"
               title="Search" autocomplete="off" spellcheck="false" dir="auto" />
