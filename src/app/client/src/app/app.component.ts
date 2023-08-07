@@ -867,7 +867,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.userService.setUserFramework(event);
         this.checkLocationStatus();
         this.utilService.toggleAppPopup();
-        this.showAppPopUp = this.utilService.showAppPopUp;
+        // this.showAppPopUp = this.utilService.showAppPopUp;
+        this.showAppPopUp = false;
       }, err => {
         this.toasterService.warning(this.resourceService.messages.emsg.m0012);
         this.closeFrameworkPopup();
