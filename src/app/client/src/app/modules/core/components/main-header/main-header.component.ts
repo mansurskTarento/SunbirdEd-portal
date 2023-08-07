@@ -799,6 +799,10 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
     this.electronService.get({ url: this.config.urlConFig.URLS.OFFLINE.LOGIN }).subscribe();
   }
 
+  // doSignUp(){
+  //   this.router.navigate(['/signup'])
+  // }
+
   initializeManagedUser(selectedUser) {
     this.telemetryService.setInitialization(false);
     this.telemetryService.initialize(this.getTelemetryContext());
