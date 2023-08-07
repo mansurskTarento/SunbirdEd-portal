@@ -108,6 +108,10 @@
     z-index: 1;
   }
 }
-.sb--card__title{
-  padding-bottom: 0rem !important;
+
+
+::ng-deep {
+  .sb--card__title{
+    padding-bottom: 0rem !important;
+  } 
 }
