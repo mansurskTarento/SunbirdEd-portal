@@ -84,6 +84,9 @@
   font-weight: bold;
   color: var(--primary-theme) !important;
 }
-.ui.text.menu .item {
-  padding: 0.35714286em 0.5em !important;
- }
+
+ ::ng-deep {
+  .ui.text.menu .item {
+    padding: 0.35714286em 0.5em !important;
+   }
+}
