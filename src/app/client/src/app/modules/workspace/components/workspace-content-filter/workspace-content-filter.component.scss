@@ -12,3 +12,16 @@
     .popup-content{
         width: calculateRem(850px) !important;
     }
+
+    #search-input-container{
+        width: 100%;
+    }
+    #filterInput{
+        width: 100%;
+        .searchicon{
+            width: 100%;
+        }
+        input {
+      width: 100%;
+        }
+    }
