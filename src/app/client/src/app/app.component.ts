@@ -612,7 +612,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public checkTncAndFrameWorkSelected() {
     if (_.has(this.userService.userProfile, 'promptTnC') && _.has(this.userService.userProfile, 'tncLatestVersion') &&
       _.has(this.userService.userProfile, 'tncLatestVersion') && this.userService.userProfile.promptTnC === true) {
-      this.showTermsAndCondPopUp = true;
+      this.showTermsAndCondPopUp = false;
     } else {
       if (this.userService.loggedIn) {
         this.orgDetailsService.getCustodianOrgDetails().subscribe((custodianOrg) => {

@@ -1110,6 +1110,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.userPreference = response;
                 });
             }
+            this.showEdit = this.userPreference?.framework?.medium?.length ? false: true
         } catch (error) {
             return null;
         }
