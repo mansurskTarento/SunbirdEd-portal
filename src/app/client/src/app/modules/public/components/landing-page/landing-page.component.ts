@@ -4,12 +4,14 @@ import { FormService } from '@sunbird/core';
 import * as _ from 'lodash-es';
 import { mergeMap, takeUntil, map } from 'rxjs/operators';
 import { of,combineLatest, Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { LandingPageService } from './landing-page.service';
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss']
+  styleUrls: ['./landing-page.component.scss'],
+  providers: [LandingPageService
+   ],
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
@@ -21,7 +23,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   showAnnoucements: boolean = true;
   mainContent=  [];
 
-  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService,private http: HttpClient) {
+  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService,private landingpageservice:LandingPageService) {
     this.formService= formService;
     this.resourceService = resourceService;
     
@@ -32,7 +34,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
       let url = `${window.location.origin}/logoff`
       // fetch(url).then(console.log);
-      
+      this.landingpageservice.logout(url).subscribe(res=>{})
     
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.getUserContentconfig();
