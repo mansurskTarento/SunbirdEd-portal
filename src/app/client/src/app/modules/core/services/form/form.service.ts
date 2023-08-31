@@ -1,7 +1,7 @@
 
 import { map, mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { UserService } from './../user/user.service';
+import { UserService } from '@sunbird/core';
 import { ConfigService, ServerResponse, BrowserCacheTtlService } from '@sunbird/shared';
 import { Observable, of } from 'rxjs';
 import { PublicDataService } from './../public-data/public-data.service';
@@ -81,7 +81,7 @@ export class FormService {
     )
   }
   getHashTagID() {
-    if (this.userService.loggedIn) {
+    if (this.userService && this.userService.loggedIn) {
       return of(this.userService.hashTagId);
     } else {
       if (this.userService.slug) {
