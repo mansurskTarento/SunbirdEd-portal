@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LayoutService, ServerResponse, ResourceService} from '@sunbird/shared';
+import { LayoutService, ServerResponse, ResourceService, UserService} from '@sunbird/shared';
 import { FormService } from '@sunbird/core';
 import * as _ from 'lodash-es';
 import { mergeMap, takeUntil, map } from 'rxjs/operators';
@@ -20,12 +20,17 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   showAnnoucements: boolean = true;
   mainContent=  [];
 
-  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService) {
+  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService,private userService:UserService) {
     this.formService= formService;
     this.resourceService = resourceService;
+
    }
 
   ngOnInit() {
+      this.userService.getLogout().subscribe((data)=>{
+
+      })
+    
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.getUserContentconfig();
     ;

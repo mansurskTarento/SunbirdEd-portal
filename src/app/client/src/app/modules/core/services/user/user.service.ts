@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { ConfigService, ServerResponse, IUserProfile, IUserData, IOrganization, BrowserCacheTtlService } from '@sunbird/shared';
+import { ConfigService, ServerResponse, IUserProfile, IUserData, IOrganization, BrowserCacheTtlService,UtilService } from '@sunbird/shared';
 import { LearnerService } from './../learner/learner.service';
 import { ContentService } from './../content/content.service';
 import { Injectable, Inject, EventEmitter } from '@angular/core';
@@ -86,6 +86,8 @@ export class UserService {
    * Reference of content service.
    */
   public contentService: ContentService;
+
+  appBaseUrl:string
   /**
    * Reference of orgNames
    */
@@ -125,8 +127,10 @@ export class UserService {
   */
   constructor(config: ConfigService, learner: LearnerService, private cacheService: CacheService,
     private http: HttpClient, contentService: ContentService, publicDataService: PublicDataService,
+    public utilService: UtilService,
     private browserCacheTtlService: BrowserCacheTtlService,
     @Inject(APP_BASE_HREF) baseHref: string) {
+      this.appBaseUrl = this.utilService.getAppBaseUrl();
     this.config = config;
     this.learnerService = learner;
     this.contentService = contentService;
@@ -600,6 +604,10 @@ export class UserService {
         return data;
       }));
     }
+  }
+
+  getLogout(){
+   return this.http.get(this.appBaseUrl+'/logoff')
   }
 
 }
