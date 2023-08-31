@@ -4,6 +4,7 @@ import { FormService } from '@sunbird/core';
 import * as _ from 'lodash-es';
 import { mergeMap, takeUntil, map } from 'rxjs/operators';
 import { of,combineLatest, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-landing-page',
@@ -20,15 +21,18 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   showAnnoucements: boolean = true;
   mainContent=  [];
 
-  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService,) {
+  constructor(public layoutService: LayoutService, public formService: FormService, public resourceService: ResourceService,private http: HttpClient) {
     this.formService= formService;
     this.resourceService = resourceService;
+    
+
 
    }
 
   ngOnInit() {
       let url = `${window.location.origin}/logoff`
-      fetch(url).then(console.log);
+      // fetch(url).then(console.log);
+      
     
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.getUserContentconfig();
