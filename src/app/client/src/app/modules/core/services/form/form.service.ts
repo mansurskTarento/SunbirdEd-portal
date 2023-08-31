@@ -81,7 +81,7 @@ export class FormService {
     )
   }
   getHashTagID() {
-    if (this.userService.loggedIn) {
+    if (this.userService && this.userService.loggedIn) {
       return of(this.userService.hashTagId);
     } else {
       if (this.userService.slug) {
