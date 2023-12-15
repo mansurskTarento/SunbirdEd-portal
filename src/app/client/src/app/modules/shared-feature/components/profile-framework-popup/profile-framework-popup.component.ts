@@ -55,7 +55,11 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dialogRef = this.dialogProps && this.dialogProps.id && this.matDialog.getDialogById(this.dialogProps.id);
     this.popupControlService.changePopupStatus(false);
-    this.selectedOption = _.pickBy(_.cloneDeep(this.formInput), 'length') || {}; // clone selected field inputs from parent
+    let boardObj = {board:this.formInput.board}
+    this.selectedOption = _.pickBy(_.cloneDeep(boardObj), 'length') || {}; // clone selected field inputs from parent
+    if(boardObj.board.length){
+     this.showButton =  true;
+    }
     if (this.isGuestUser && !this.isStepper) {
       this.orgDetailsService.getOrgDetails(this.userService.slug).subscribe((data: any) => {
         this.guestUserHashTagId = data.hashTagId;
@@ -91,6 +95,8 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
       });
 
     this.setInteractEventData();
+    console.log('frameworkId',this.frameWorkId);
+    
   }
   private getFormOptionsForCustodianOrgForGuestUser() {
     return this.getCustodianOrgDataForGuest().pipe(mergeMap((data) => {
