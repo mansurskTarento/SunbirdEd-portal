@@ -185,12 +185,12 @@
               </ng-container>
             </div>
           </div>
-          <div class="mb-24" *ngIf="convertToString(userProfile.framework.medium)">
+          <div class="mb-24" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.medium | transposeTerms: 'frmelmnts.lbl.medium' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8  mb-8 fmedium-list"
-              *ngIf="userProfile.framework">
-              <ng-container *ngFor="let medium of userProfile?.framework?.medium;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{medium}}</span>
+              *ngIf="FrameworkRole.length!=0">
+              <ng-container *ngFor="let medium of FrameworkRole;let i=index">
+                <span  class="preference-items mb-16 mr-16">{{medium.name}}</span>
               </ng-container>
             </div>
           </div>

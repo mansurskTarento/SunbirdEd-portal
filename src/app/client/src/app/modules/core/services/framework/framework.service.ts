@@ -55,6 +55,10 @@ export class FrameworkService {
                const frameWorkName = framework ? framework : 'defaultFramework';
                 this._frameworkData[frameWorkName] = frameworkData.result.framework;
                 this._frameworkData$.next({ err: null, frameworkdata: this._frameworkData });
+                const frameworkDataList = this._frameworkData?.defaultFramework?.categories;
+                 const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
+                console.log('fwData',FrameworkRole)
+                localStorage.setItem('frameworkRoleData',JSON.stringify(FrameworkRole[0]))
               },
               err => {
                 this._frameworkData$.next({ err: err, frameworkdata: null });

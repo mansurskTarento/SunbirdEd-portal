@@ -99,6 +99,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   showFullScreenLoader = false;
   userProfileConfig:{}
   showUserProfileConfig:boolean = true
+  FrameworkRole:{}
 
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,
   public resourceService: ResourceService, public coursesService: CoursesService,
@@ -117,6 +118,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.getFrameworkRoleData()
     this.isDesktopApp = this.utilService.isDesktopApp;
 
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -167,6 +169,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setInteractEventData();
     this.getUserContentConfig();
   } 
+
+
+  getFrameworkRoleData(){
+    const frameworkRoleList = JSON.parse(localStorage.getItem('frameworkRoleData'))
+    console.log('FrameworkRole',frameworkRoleList)
+    const roleData = frameworkRoleList?.terms[0]?.associations
+    this.FrameworkRole = roleData.filter(data=>data?.category === 'medium')
+    console.log('roleData', this.FrameworkRole)
+  }
 
 
   getUserContentConfig(){
