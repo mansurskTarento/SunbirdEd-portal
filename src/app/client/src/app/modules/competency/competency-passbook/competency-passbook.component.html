@@ -1,0 +1,52 @@
+<div class="passbook-container">
+    <div class="passbook-int-container">
+        <h1 class="comp-title">{{'Competency Dashboard'}}</h1>
+        <h2 class="pass-title">{{'Passbook'}}</h2>
+
+            <div class="legend-container">
+              <div class="legend legend-blue"></div>
+              <h5 class="mb-0">{{'External'}}</h5>
+              <div class="legend legend-green"></div>
+              <h5 class="mb-0">{{'Self'}}</h5>
+              <div class="legend legend-yellow"></div>
+              <h5 class="mb-0">{{'Course' }}</h5>
+            </div>
+      
+            <h1 class="comp-title">{{'Pregnancy and Identification'}}</h1>
+            <div class="levelsTitle" >{{'LEVELS'}}</div>
+
+            <mat-accordion>
+              
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header class="flex-between items-center panel-header w-full">
+                    <mat-panel-title>
+                     LEVELS
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                <div>
+                  <span>{{'Log:'}}</span>
+                  <ng-container *ngFor="let logs of logList"  class="logs-data">
+                  <div class="logs-desc" >
+                   <span>
+                  {{'Level'}} {{logs.level}}  {{logs.name}}
+                   </span>
+                   <span>
+                     {{logs.date}}
+                     </span>
+                  </div>
+                   <mat-divider></mat-divider>
+
+
+                  </ng-container>
+                </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            
+
+    </div>
+
+</div>
