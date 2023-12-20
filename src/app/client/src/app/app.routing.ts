@@ -72,6 +72,10 @@ const appRoutes: Routes = [
     path: 'program', loadChildren: () => import('app/modules/program-dashboard/program-dashboard.module').then(m => m.programDashboardModule)
   },
   {
+    path: 'competency', loadChildren: () => import('app/modules/competency/competency.module').then(m=>m.CompetencyModule)
+  },
+
+  {
     path: 'error', component: ErrorPageComponent
   },
   {

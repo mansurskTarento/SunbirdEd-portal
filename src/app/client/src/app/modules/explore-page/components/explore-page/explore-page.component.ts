@@ -92,6 +92,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     Categorytheme: any;
     filterResponseData = {};
     refreshFilter: boolean = true;
+    isCardDisplay:boolean = false;
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
