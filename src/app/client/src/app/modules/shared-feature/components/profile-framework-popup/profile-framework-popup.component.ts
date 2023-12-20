@@ -55,9 +55,9 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dialogRef = this.dialogProps && this.dialogProps.id && this.matDialog.getDialogById(this.dialogProps.id);
     this.popupControlService.changePopupStatus(false);
-    let boardObj = {board:this.formInput.board}
+    let boardObj = {board:this.formInput?.board}
     this.selectedOption = _.pickBy(_.cloneDeep(boardObj), 'length') || {}; // clone selected field inputs from parent
-    if(boardObj.board.length){
+    if(boardObj?.board.length){
      this.showButton =  true;
     }
     if (this.isGuestUser && !this.isStepper) {
