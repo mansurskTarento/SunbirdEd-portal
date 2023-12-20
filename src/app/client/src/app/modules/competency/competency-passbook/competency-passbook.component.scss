@@ -1,0 +1,78 @@
+.passbook-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+
+    .passbook-int-container {
+        position: absolute;
+        height: 40rem;
+        width: 50vw;
+        background-color: lightgray;
+
+        .comp-title {
+                margin-top: 5%;
+                font-family: sans-serif;
+                font-size: 24px;
+            }
+
+            .legend-container {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+                align-items: center;
+                margin-bottom: 20px;
+              
+                @media only screen and (max-width: 599px) {
+                  gap: 5px;
+                }
+              
+                h5 {
+                  margin: 0;
+                  font-weight: 400;
+                  font-size: 16px;
+                  @media only screen and (max-width: 599px) {
+                    font-size: 12px;
+                  }
+                }
+              
+                .legend {
+                  min-width: 15px;
+                  height: 15px;
+                  background: #dfedf9;
+                  border-radius: 50%;
+                  border: 0.5px solid #959595;
+                }
+              
+                .legend-green {
+                  background: var(--teal);
+                  margin-left: 18px;
+                }
+                .legend-blue {
+                  background: #7cb5e6;
+                }
+                .legend-yellow {
+                  background: #fffbb0;
+                  margin-left: 18px;
+                }
+              }
+              .levelsTitle {
+                font-size: 14px;
+                line-height: 24px;
+                letter-spacing: -.02em;
+                color: black;
+              }
+
+              .logs-data {
+                display: flex;
+                flex-direction: column;
+               
+              }
+              .logs-desc {
+                display: flex;
+                justify-content: space-between;
+              }
+
+    }
+}
