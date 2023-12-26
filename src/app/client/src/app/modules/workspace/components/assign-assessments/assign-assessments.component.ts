@@ -47,7 +47,7 @@ export class AssignAssessmentsComponent implements OnInit, OnDestroy {
             path: '/pendingForSubmission/1',
             index: 0
         }, {
-            label: 'All',
+            label: 'Assign',
             path: '/all/1',
             index: 1
         }
