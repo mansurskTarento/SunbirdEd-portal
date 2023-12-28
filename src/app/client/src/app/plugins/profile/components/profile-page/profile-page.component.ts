@@ -99,7 +99,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   showFullScreenLoader = false;
   userProfileConfig:{}
   showUserProfileConfig:boolean = true
-  FrameworkRole:{}
+  FrameworkRole:any;
 
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,
   public resourceService: ResourceService, public coursesService: CoursesService,
