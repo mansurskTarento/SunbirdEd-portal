@@ -72,7 +72,6 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (_.get(changes, 'facets.currentValue.length')) {
       const updatedFacets = changes['facets'].currentValue;
-      console.log('updatedFacets',updatedFacets)
       this.filterFormTemplateConfig = [...updatedFacets].sort((a, b) => {
         if (a.index && b.index) {
           return a.index.localeCompare(b.index);
