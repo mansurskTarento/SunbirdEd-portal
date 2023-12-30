@@ -72,7 +72,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (_.get(changes, 'facets.currentValue.length')) {
       const updatedFacets = changes['facets'].currentValue;
-
+      console.log('updatedFacets',updatedFacets)
       this.filterFormTemplateConfig = [...updatedFacets].sort((a, b) => {
         if (a.index && b.index) {
           return a.index.localeCompare(b.index);
@@ -102,6 +102,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
           multiple: true
         };
       });
+      this.filterFormTemplateConfig = this.filterFormTemplateConfig?.filter(data=>data.facet === 'se_boards' || data.facet === 'se_mediums' || data.facet === 'se_subjects')
       this.resourceService.languageSelected$.pipe(takeUntil(this.unsubscribe$)).subscribe((languageData) => {
         this.filterFormTemplateConfig.forEach((facet) => {
           facet['labelText'] = this.utilService.transposeTerms(facet['labelText'], facet['labelText'], this.resourceService.selectedLang);
