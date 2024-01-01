@@ -396,7 +396,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     return this.resourceService.languageSelected$.pipe(
       switchMap(_ => this._filterConfig$),
       tap((config: IFrameworkCategoryFilterFieldTemplateConfig[]) => {
-        this.filterFormTemplateConfig = config;
+        this.filterFormTemplateConfig = config.filter(data=>data.category === 'board' || data.category === 'medium' || data.category === 'subject');
         this.resourceService.languageSelected$.pipe(takeUntil(this.unsubscribe$)).subscribe((languageData) => {
           this.filterFormTemplateConfig?.forEach((facet) => {
             facet['labelText'] = this.utilService.transposeTerms(facet['labelText'], facet['labelText'], this.resourceService.selectedLang);

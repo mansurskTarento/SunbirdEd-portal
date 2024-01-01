@@ -165,8 +165,9 @@ getAllOpenBatches(contents) {
   }
 
   canCreateBatch(courseHierarchy) {
-    return (this.isTrackableCollection(courseHierarchy) && this.permissionService.checkRolesPermissions(['CONTENT_CREATOR'])
-      && this.userService.userid === _.get(courseHierarchy, 'createdBy'));
+    return (this.isTrackableCollection(courseHierarchy) && this.permissionService.checkRolesPermissions(['CONTENT_CREATOR','CONTENT_REVIEWER',])
+      // && this.userService.userid === _.get(courseHierarchy, 'createdBy')
+      );
   }
 
   canViewDashboard(courseHierarchy) {
