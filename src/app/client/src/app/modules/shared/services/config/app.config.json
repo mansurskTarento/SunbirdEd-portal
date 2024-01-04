@@ -1342,6 +1342,11 @@
     "inPageredirectUrl": "workspace/content/draft/1",
     "searchPageredirectUrl": "workspace/content/draft/1"
   },
+  "review": {
+    "filterType": "reviewTab",
+    "inPageredirectUrl": "workspace/content/review/1",
+    "searchPageredirectUrl": "workspace/content/review/1"
+  },
   "published": {
     "filterType": "published",
     "inPageredirectUrl": "workspace/content/published/1",
@@ -1351,6 +1356,11 @@
     "filterType": "collaboration",
     "inPageredirectUrl": "workspace/content/collaborating-on/1",
     "searchPageredirectUrl": "workspace/content/collaborating-on/1"
+  },
+  "uploaded": {
+    "filterType": "uploadTab",
+    "inPageredirectUrl": "workspace/content/uploaded/1",
+    "searchPageredirectUrl": "workspace/content/uploaded/1"
   },
   "explore": {
     "filterType": "explore",

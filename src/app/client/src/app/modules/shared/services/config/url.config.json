@@ -384,7 +384,10 @@
       "GENERIC_REPORTS": "reports/mlreports/v1/fetch",
       "ALL_EVIDENCE":"observations/mlsurvey/v1/listAllEvidences"
     },
-    "UCI": "/uci"
+    "UCI": "/uci",
+    "COMPETENCY": {
+      "READ": "course/v1/passbook/read"
+    }
 
   }
 }
