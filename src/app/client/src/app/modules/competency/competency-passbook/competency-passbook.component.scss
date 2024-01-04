@@ -9,13 +9,25 @@
         position: absolute;
         height: 40rem;
         width: 50vw;
-        background-color: lightgray;
+        padding: 0px 5px;
+        // background-color: lightgray;
 
         .comp-title {
                 margin-top: 5%;
                 font-family: sans-serif;
                 font-size: 24px;
             }
+
+        .pass-title {
+          font-family: sans-serif;
+          font-size: 24px;
+        }
+
+        .passbook-header {
+          margin-top: 5%;
+          font-family: sans-serif;
+          font-size: 20px;
+        }
 
             .legend-container {
                 display: flex;
@@ -57,22 +69,88 @@
                   margin-left: 18px;
                 }
               }
-              .levelsTitle {
-                font-size: 14px;
-                line-height: 24px;
-                letter-spacing: -.02em;
-                color: black;
-              }
-
-              .logs-data {
-                display: flex;
-                flex-direction: column;
-               
-              }
-              .logs-desc {
-                display: flex;
-                justify-content: space-between;
-              }
-
+          
+            .levelsTitle {
+              font-size: 14px;
+              line-height: 24px;
+              letter-spacing: -.02em;
+              color: var(--black);
+            }
+          
+            .panel {
+              box-shadow: 0px 0px 0px 0px !important;
+              padding: 1px 3px 1px 0px;
+              width: calc(100% - 2px);
+              margin-left: -5px;
+              padding: 0px 5px;
+            }
+          
+            .panel-header {
+              padding: 0px !important;
+              background: none !important;
+            }
+            
+            .panel-header-description {
+              margin: 0px !important;
+              padding: 1px;
+            }
+          
+          
+            .arrowReverse {
+              transform: rotateX(180deg);
+            }
+          
+            .level {
+              width: 47px;
+              max-width: 16.6%;
+              height: 36px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              box-shadow: 0px 0px 2.17333px #00000040;
+            }
+          
+            .log-header {
+              font-size: 14px;
+              line-height: 24px;
+              letter-spacing: -.02em;
+              color: var(--black);
+            }
+          
+            .log {
+              font-style: italic;
+              font-size: 14px;
+              line-height: 16px;;
+              letter-spacing: -.02em;
+              color: var(--gray-400);
+              border-bottom: 1px solid #DDDDDD;
+              padding-bottom: 9px;
+              margin-top: 10px;
+            }
+          
+            .log-date {
+              font-style: normal;
+              font-size: 12px;
+              line-height: 14px;
+              letter-spacing: -.02em;
+              color: var(--gray-400);
+              margin: 0 auto;
+            }
+          
+            ::ng-deep .mat-expansion-panel-body {
+              padding: 0px !important;
+            }
+          
+            :host ::ng-deep .mat-content {
+              display: unset !important;
+            }
+          
+            .hide-content {
+              display: none;
+            }
+          
+            .individual-select {
+              border: 2px solid #1C5D95;
+            }
     }
 }

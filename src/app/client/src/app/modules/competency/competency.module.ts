@@ -5,6 +5,7 @@ import { CompetencyRoutingModule } from './competency-routing.module';
 import { CompetencyPassbookComponent } from './competency-passbook/competency-passbook.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
+import { MaterialModule } from '../shared/modules/material/material.module';
 
 
 
@@ -16,7 +17,8 @@ import {MatDividerModule} from '@angular/material/divider';
     CommonModule,
     CompetencyRoutingModule,
     MatExpansionModule,
-    MatDividerModule
+    MatDividerModule,
+    MaterialModule
   ]
 })
 export class CompetencyModule {
