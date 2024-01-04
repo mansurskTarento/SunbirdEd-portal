@@ -10,6 +10,8 @@ import { WorkSpaceService } from '../../services';
 import * as _ from 'lodash-es';
 import { SuiModalService, TemplateModalConfig, ModalTemplate } from 'ng2-semantic-ui-v9';
 import { IImpressionEventInput } from '@sunbird/telemetry';
+import { combineLatest } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 /**
  * The uploaded component search for all the uploaded
@@ -155,20 +157,38 @@ export class UploadedComponent extends WorkSpace implements OnInit, AfterViewIni
     this.state = 'uploaded';
   }
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      this.pageNumber = Number(params.pageNumber);
-      this.fetchUploaded(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber);
-    });
+    combineLatest(
+      this.activatedRoute.params,
+      this.activatedRoute.queryParams).pipe(
+        debounceTime(100),
+        map(([params, queryParams]) => ({ params, queryParams })
+        ))
+      .subscribe((bothParams: any) => {
+        if (bothParams.params.pageNumber) {
+          this.pageNumber = Number(bothParams.params.pageNumber);
+        }
+        this.fetchUploaded(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+      });
   }
   /**
      * This method sets the make an api call to get all uploaded content with page No and offset
      */
-  fetchUploaded(limit: number, pageNumber: number) {
+  fetchUploaded(limit: number, pageNumber: number, bothParams?: object) {
     this.showLoader = true;
     this.pageNumber = pageNumber;
     this.pageLimit = limit;
     const primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories,
       this.frameworkService['_channelData'].collectionPrimaryCategories));
+    let sort: any = null;
+    if (bothParams['queryParams'] && bothParams['queryParams'].sort_by) {
+      const sort_by = bothParams['queryParams'].sort_by;
+      const sortType = bothParams['queryParams'].sortType;
+      sort = {
+        [sort_by]: _.toString(sortType)
+      };
+    } else {
+      sort = { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn };
+    }
 
     const searchParams = {
       filters: {
@@ -177,10 +197,15 @@ export class UploadedComponent extends WorkSpace implements OnInit, AfterViewIni
         primaryCategory: (!_.isEmpty(primaryCategories) ? primaryCategories : this.config.appConfig.WORKSPACE.primaryCategory),
         mimeType: ['application/pdf', 'video/x-youtube', 'application/vnd.ekstep.html-archive',
           'application/epub', 'application/vnd.ekstep.h5p-archive', 'video/mp4', 'video/webm', 'text/x-url'],
+        board: bothParams['queryParams'].board,
+        subject: bothParams['queryParams'].subject,
+        medium: bothParams['queryParams'].medium,
+        gradeLevel: bothParams['queryParams'].gradeLevel
       },
       limit: this.pageLimit,
       offset: (this.pageNumber - 1) * (this.pageLimit),
-      sort_by: { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn }
+      sort_by: sort,
+      query: _.toString(bothParams['queryParams'].query),
     };
     this.loaderMessage = {
       'loaderMessage': this.resourceService.messages.stmsg.m0023,

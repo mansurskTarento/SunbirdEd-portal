@@ -10,6 +10,8 @@ import {
 import { WorkSpaceService } from '../../services';
 import * as _ from 'lodash-es';
 import { IImpressionEventInput } from '@sunbird/telemetry';
+import { combineLatest } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 
 /**
  * The Review submission  component
@@ -157,18 +159,36 @@ export class ReviewSubmissionsComponent extends WorkSpace implements OnInit, Aft
           this.isQuestionSetEnabled = response?.questionSetEnablement;
         }
     );
-    this.activatedRoute.params.subscribe(params => {
-      this.pageNumber = Number(params.pageNumber);
-      this.fetchReviewContents(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber);
-    });
+    combineLatest(
+      this.activatedRoute.params,
+      this.activatedRoute.queryParams).pipe(
+        debounceTime(100),
+        map(([params, queryParams]) => ({ params, queryParams })
+        ))
+      .subscribe((bothParams: any) => {
+        if (bothParams.params.pageNumber) {
+          this.pageNumber = Number(bothParams.params.pageNumber);
+        }
+        this.fetchReviewContents(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
+      });
   }
   /**
    * This method sets the make an api call to get all reviewContent with page No and offset
   */
-  fetchReviewContents(limit: number, pageNumber: number) {
+  fetchReviewContents(limit: number, pageNumber: number, bothParams?: object) {
     this.showLoader = true;
     this.pageNumber = pageNumber;
     this.pageLimit = limit;
+    let sort: any = null;
+    if (bothParams['queryParams'] && bothParams['queryParams'].sort_by) {
+      const sort_by = bothParams['queryParams'].sort_by;
+      const sortType = bothParams['queryParams'].sortType;
+      sort = {
+        [sort_by]: _.toString(sortType)
+      };
+    } else {
+      sort = { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn };
+    }
     const primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories,
        this.frameworkService['_channelData'].collectionPrimaryCategories));
     const searchParams = {
@@ -177,10 +197,15 @@ export class ReviewSubmissionsComponent extends WorkSpace implements OnInit, Aft
         createdBy: this.userService.userid,
         primaryCategory: (!_.isEmpty(primaryCategories) ? primaryCategories : this.config.appConfig.WORKSPACE.primaryCategory),
         objectType: this.isQuestionSetEnabled ? this.config.appConfig.WORKSPACE.allowedObjectType : this.config.appConfig.WORKSPACE.objectType,
+        board: bothParams['queryParams'].board,
+        subject: bothParams['queryParams'].subject,
+        medium: bothParams['queryParams'].medium,
+        gradeLevel: bothParams['queryParams'].gradeLevel
       },
       limit: this.pageLimit,
       offset: (this.pageNumber - 1) * (this.pageLimit),
-      sort_by: { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn }
+      sort_by: sort,
+      query: _.toString(bothParams['queryParams'].query),
     };
     this.search(searchParams).subscribe(
       (data: ServerResponse) => {

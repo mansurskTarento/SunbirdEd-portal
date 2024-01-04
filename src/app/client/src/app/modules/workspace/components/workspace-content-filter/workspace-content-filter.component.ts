@@ -164,6 +164,14 @@ export class WorkspaceContentFilterComponent implements OnInit {
       this.filterType = this.config.appConfig.pendingForEvaluation.filterType;
        this.redirectUrl = this.config.appConfig.pendingForEvaluation.inPageredirectUrl;
     }
+    else if(_.includes(this.route.url, 'content/review')){
+      this.filterType = this.config.appConfig.review.filterType;
+      this.redirectUrl = this.config.appConfig.review.inPageredirectUrl;
+    }
+    else if(_.includes(this.route.url, 'content/uploaded')){
+      this.filterType = this.config.appConfig.uploaded.filterType;
+      this.redirectUrl = this.config.appConfig.uploaded.inPageredirectUrl;
+    }
      else {
       this.filterType = this.config.appConfig.allmycontent.filterType;
       this.redirectUrl = this.config.appConfig.allmycontent.inPageredirectUrl;
