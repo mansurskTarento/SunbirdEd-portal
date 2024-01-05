@@ -177,7 +177,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     const roleData = frameworkRoleList?.terms[0]?.associations
     this.FrameworkRole = roleData?.filter(data=>data?.category === 'medium' || data?.category === 'gradeLevel' || data?.category === 'subject' || data?.category === 'difficultyLevel')
     console.log('roleData', this.FrameworkRole)
-    // this.frameworkGradeLevel = roleData?.filter(data=>data?.category === 'medium' || data?.category === 'gradeLevel' || data?.category === 'subject' || data?.category === 'difficultyLevel')
   }
 
 
