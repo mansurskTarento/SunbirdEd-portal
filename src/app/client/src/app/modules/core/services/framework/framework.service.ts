@@ -30,7 +30,9 @@ export class FrameworkService {
     public toasterService: ToasterService, public resourceService: ResourceService,
     private publicDataService: PublicDataService, public learnerService: LearnerService,
     public formService: FormService
-  ) { }
+  ) { 
+    this.initialize()
+  }
 
   public initialize(framework?: string, hashTagId?: string) {
     if (framework && !_.get(this._frameworkData, framework)) {
