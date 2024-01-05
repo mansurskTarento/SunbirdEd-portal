@@ -1106,12 +1106,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         try {
             if (this.isUserLoggedIn()) {
                 this.userPreference = { framework: this.userService.defaultFrameworkFilters };
+                this.showEdit = this.userPreference?.framework?.board?.length ? false: true;
             } else {
                 this.userService.getGuestUser().subscribe((response) => {
                     this.userPreference = response;
                 });
             }
-            this.showEdit = this.userPreference?.framework?.medium?.length ? false: true
+            this.showEdit = this.userPreference?.framework?.medium?.length ? false: false
         } catch (error) {
             return null;
         }
