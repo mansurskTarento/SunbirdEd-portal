@@ -190,34 +190,34 @@
               <div class="fmedium mt-8  mb-8 fmedium-list"
               *ngIf="FrameworkRole.length!=0">
               <ng-container *ngFor="let medium of FrameworkRole;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{medium.name}}</span>
+                <span *ngIf="medium.category === 'medium'" class="preference-items mb-16 mr-16">{{medium.name}}</span>
               </ng-container>
             </div>
           </div>
-          <div class="mb-24" *ngIf="convertToString(userProfile.framework.gradeLevel)">
+          <div class="mb-24" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.classes | transposeTerms: 'frmelmnts.lbl.classes' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8  mb-8 fmedium-list"
-              *ngIf="userProfile.framework">
-              <ng-container *ngFor="let gradeLevel of userProfile?.framework?.gradeLevel;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{gradeLevel}}</span>
+              *ngIf="FrameworkRole.length!=0">
+              <ng-container *ngFor="let gradeLevel of FrameworkRole;let i=index">
+                <span  *ngIf="gradeLevel.category === 'gradeLevel'" class="preference-items mb-16 mr-16">{{gradeLevel.name}}</span>
               </ng-container>
             </div>
           </div>
-          <div class="mb-24" *ngIf="convertToString(userProfile.framework.subject)">
+          <div class="mb-24" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.subjects | transposeTerms: 'frmelmnts.lbl.subjects' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8 mb-8 fmedium-list"
-              *ngIf="userProfile.framework">
-              <ng-container *ngFor="let subject of userProfile?.framework?.subject;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{subject}}</span>
+              *ngIf="FrameworkRole.length!=0">
+              <ng-container *ngFor="let subject of FrameworkRole;let i=index">
+                <span *ngIf="subject.category === 'subject'"  class="preference-items mb-16 mr-16">{{subject.name}}</span>
               </ng-container>
             </div>
           </div>
-          <div class="" *ngIf="convertToString(userProfile.framework.difficultyLevel)">
+          <div class="" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.difficultyLevel | transposeTerms: 'frmelmnts.lbl.difficultyLevel' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8 mb-8 fmedium-list"
-              *ngIf="userProfile.framework">
-              <ng-container *ngFor="let difficultyLevel of userProfile?.framework?.difficultyLevel;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{difficultyLevel}}</span>
+              *ngIf="FrameworkRole.length!=0">
+              <ng-container *ngFor="let difficultyLevel of FrameworkRole;let i=index">
+                <span *ngIf="difficultyLevel.category === 'difficultyLevel'"  class="preference-items mb-16 mr-16">{{difficultyLevel.name}}</span>
               </ng-container>
             </div>
           </div>
