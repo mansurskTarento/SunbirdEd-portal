@@ -592,7 +592,7 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
     }
     return {
         'questionset': {
-          name: 'Untitled QuestionSet',
+          name: _.lowerCase(this.contentType) === 'questionset' ? 'Untitled QuestionSet' : 'Untitled Blueprint QuestionSet',
           mimeType: 'application/vnd.sunbird.questionset',
           primaryCategory: _.lowerCase(this.contentType) === 'questionset' ? 'Practice Question Set' : 'Blueprint Question Set',
           createdBy: this.userService.userProfile.id,
