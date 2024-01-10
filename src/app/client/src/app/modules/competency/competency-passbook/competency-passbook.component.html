@@ -81,6 +81,11 @@
                   </mat-accordion>
                 </div>
               </ng-container>
+            <ng-container *ngIf="!passbookDetails || passbookDetails.length === 0">
+              <div class="no-competency">
+                <h2>Competency is not available</h2>
+              </div>
+            </ng-container>
     </div>
 
 </div>

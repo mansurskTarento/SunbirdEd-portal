@@ -114,38 +114,7 @@ export class CompetencyPassbookComponent implements OnInit {
    _.forEach(acquiredDetails,(value:any)=>{
        const channel = _.get(value,'acquiredChannel')
        switch(channel) {
-         case 'course':{
-           _.forEach(response, (level:any)=>{
-             if(level.displayLevel == _.get(value,'competencyLevelId')){
-               level.color = '#FFFBB0';
-               level.selected = true
-             }
-           } )
-           
-           break; 
-         }
-         case 'Course':{
-          _.forEach(response, (level:any)=>{
-            if(level.displayLevel == _.get(value,'competencyLevelId')){
-              level.color = '#FFFBB0';
-              level.selected = true
-            }
-          } )
-          
-          break; 
-        }
-         case 'selfAssessment':{
-           _.forEach(response, (level:any)=>{
-             if(level.displayLevel == _.get(value,'competencyLevelId')){
-               level.color = '#A4DFCA';
-               level.selected = true
-               
-             }
-           } )
-         
-           break; 
-         }
-         case 'admin':{
+         case 'piaaAssessment':{
            _.forEach(response, (level:any)=>{
              if(level.displayLevel == _.get(value,'competencyLevelId')){
                level.color = '#7cb5e6';
@@ -153,6 +122,17 @@ export class CompetencyPassbookComponent implements OnInit {
              }
            } )
            
+           break; 
+         }
+         case 'selfAssessment':{
+           _.forEach(response, (level:any)=>{
+             if(level.displayLevel == _.get(value,'competencyLevelId') && level.color === '#FFFBB0'){
+               level.color = '#A4DFCA';
+               level.selected = true
+               
+             }
+           } )
+         
            break; 
          }
          default: { 
