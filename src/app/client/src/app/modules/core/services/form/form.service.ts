@@ -8,6 +8,7 @@ import { PublicDataService } from './../public-data/public-data.service';
 import { CacheService } from 'ng2-cache-service';
 import * as _ from 'lodash-es';
 import { OrgDetailsService } from '../org-details/org-details.service';
+import { LearnerService } from '../learner/learner.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -32,7 +33,8 @@ export class FormService {
    * @param {PublicDataService} publicDataService content service reference
    */
   constructor(userService: UserService, configService: ConfigService, publicDataService: PublicDataService,
-    private cacheService: CacheService, private browserCacheTtlService: BrowserCacheTtlService, private orgDetailsService: OrgDetailsService) {
+    private cacheService: CacheService, private browserCacheTtlService: BrowserCacheTtlService, private orgDetailsService: OrgDetailsService,
+    private learnerService: LearnerService) {
     this.userService = userService;
     this.configService = configService;
     this.publicDataService = publicDataService;
@@ -101,5 +103,12 @@ export class FormService {
      const key = btoa(formKey);
      this.cacheService.set(key, formData,
       {maxAge: this.browserCacheTtlService.browserCacheTtl});
+  }
+
+  getUserByIdV5(requestParam) {
+    const option = {
+      url: this.configService.urlConFig.URLS.USER.GET_PROFILE_V5 + requestParam.userId + '?fields=organisations,roles,locations'
+    };
+    return this.learnerService.get(option);
   }
 }

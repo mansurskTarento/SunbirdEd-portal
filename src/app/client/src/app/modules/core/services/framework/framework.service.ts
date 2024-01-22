@@ -41,18 +41,20 @@ export class FrameworkService {
           this._frameworkData[frameWorkName] = frameworkData.result.framework;
           this._frameworkData$.next({ err: null, frameworkdata: this._frameworkData });
           const frameworkDataList = this._frameworkData?.defaultFramework?.categories;
-                 const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
-                console.log('fwData',FrameworkRole)
-                localStorage.setItem('frameworkRoleData',JSON.stringify(FrameworkRole[0]))
+                //  const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
+                // console.log('fwData',FrameworkRole)
+                localStorage.setItem('frameworkRoleData',JSON.stringify(frameworkDataList))
         }, err => {
           this._frameworkData$.next({ err: err, frameworkdata: null });
       });
       } else if (_.get(this._frameworkData, framework)) {
         this._frameworkData$.next({ err: null, frameworkdata: this._frameworkData });
+        console.log('daataaa',this._frameworkData)
         const frameworkDataList = this._frameworkData?.defaultFramework?.categories;
-                 const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
-                console.log('fwData',FrameworkRole)
-                localStorage.setItem('frameworkRoleData',JSON.stringify(FrameworkRole[0]))
+        console.log('bbbbb',frameworkDataList)
+                //  const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
+                // console.log('fwData',FrameworkRole)
+                localStorage.setItem('frameworkRoleData',JSON.stringify(frameworkDataList))
       } else {
         if (!_.get(this._frameworkData, 'defaultFramework')) {
           this.getChannel(hashTagId ? hashTagId : this.userService.hashTagId)
@@ -65,10 +67,12 @@ export class FrameworkService {
                const frameWorkName = framework ? framework : 'defaultFramework';
                 this._frameworkData[frameWorkName] = frameworkData.result.framework;
                 this._frameworkData$.next({ err: null, frameworkdata: this._frameworkData });
+                console.log('daataaa',this._frameworkData)
                 const frameworkDataList = this._frameworkData?.defaultFramework?.categories;
-                 const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
-                console.log('fwData',FrameworkRole)
-                localStorage.setItem('frameworkRoleData',JSON.stringify(FrameworkRole[0]))
+                console.log('babaaaa',frameworkDataList)
+                //  const FrameworkRole = frameworkDataList.filter(data=>data.code === 'board')
+                // console.log('fwData',FrameworkRole)
+                localStorage.setItem('frameworkRoleData',JSON.stringify(frameworkDataList))
               },
               err => {
                 this._frameworkData$.next({ err: err, frameworkdata: null });

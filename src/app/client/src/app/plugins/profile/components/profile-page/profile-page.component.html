@@ -176,25 +176,61 @@
           [telemetryInteractEdata]="myFrameworkEditEdata" attr.aria-label="{{resourceService.frmelmnts.lbl.edit}} {{resourceService.frmelmnts.lbl.boards}},{{resourceService.frmelmnts.lbl.medium}},{{resourceService.frmelmnts.lbl.classes}},{{convertToString(userProfile.framework.gradeLevel)}},{{resourceService.frmelmnts.lbl.subjects}}, {{resourceService.frmelmnts.lbl.difficultyLevel}}"
           (click)="showEdit = !showEdit" tabindex="0">{{resourceService.frmelmnts.lbl.edit}}</button>
           </div>
-          <div class="mb-24 " *ngIf="convertToString(userProfile.framework.board)">
+          <div class="mb-24 " *ngIf="convertToString(boardFrameworkData)">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.boards | transposeTerms: 'frmelmnts.lbl.boards' : resourceService?.selectedLang}} :</div>
             <div class="fmedium  mt-8  mb-8 fmedium-list"
-              *ngIf="userProfile.framework">
-              <ng-container *ngFor="let board of userProfile?.framework?.board;let i=index">
-                <span  class="preference-items mb-16 mr-16">{{board}}</span>
+              *ngIf="boardFrameworkData.length">
+              <ng-container *ngFor="let board of boardFrameworkData;let i=index">
+                <span  class="preference-items mb-16 mr-16">{{board.name}}</span>
               </ng-container>
             </div>
           </div>
-          <div class="mb-24" *ngIf="FrameworkRole.length">
+        <div class="mb-24" *ngIf="convertToString(FrameworkRole)">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.medium | transposeTerms: 'frmelmnts.lbl.medium' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8  mb-8 fmedium-list"
               *ngIf="FrameworkRole.length!=0">
-              <ng-container *ngFor="let medium of FrameworkRole;let i=index">
+              <!-- <ng-container *ngFor="let medium of FrameworkRole;let i=index">
                 <span *ngIf="medium.category === 'medium'" class="preference-items mb-16 mr-16">{{medium.name}}</span>
-              </ng-container>
+              </ng-container> -->
+              <mat-accordion>
+                <mat-expansion-panel  *ngFor="let medium of FrameworkRole; let i=index" (click)="panelClicked(medium)">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="fmedium">
+                      {{medium.name}}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="activityBadge">{{'Activity'}} </div>
+                  <div class="frmDisplay">
+                  <ng-container *ngFor="let gradeLevel of otherFrameworkRoleList; let i=index" class="frmDisplay"  matExpansionPanelContent>
+                   <span  *ngIf="gradeLevel.category === 'gradeLevel'">{{'- '+ gradeLevel.name}}</span>
+                  </ng-container>
+                </div>
+                  <div class="activityBadge">{{'Competency'}}</div>
+                 <mat-expansion-panel *ngFor="let subject of subjectDataList;let i=index" (click)="compPanelClicked(subject)"> 
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="fmedium">
+                      {{subject.name}}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="activityBadge">{{'Competency Level'}} </div>
+                  <div class="frmDisplay" *ngIf="convertToString(otherSubjectFrameworkRoleList)">
+                  <ng-container *ngFor="let difficultyLevel of otherSubjectFrameworkRoleList; let i=index" class="frmDisplay"  matExpansionPanelContent>
+                   <span>{{difficultyLevel.name}}</span>
+                  </ng-container>
+                </div>
+                 </mat-expansion-panel>
+                  <!-- <div class="activityBadge">{{'Competency'}}</div>
+                  <div class="frmDisplay">
+                  <ng-container *ngFor="let subject of otherFrameworkRoleList; let i=index"  class="frmDisplay" matExpansionPanelContent>
+                    <span *ngIf="subject.category === 'subject'">{{'-'+subject.name}}</span>
+                   </ng-container>
+                  </div> -->
+                  
+                </mat-expansion-panel>
+              </mat-accordion>
             </div>
           </div>
-          <div class="mb-24" *ngIf="FrameworkRole.length">
+          <!-- <div class="mb-24" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.classes | transposeTerms: 'frmelmnts.lbl.classes' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8  mb-8 fmedium-list"
               *ngIf="FrameworkRole.length!=0">
@@ -202,8 +238,8 @@
                 <span  *ngIf="gradeLevel.category === 'gradeLevel'" class="preference-items mb-16 mr-16">{{gradeLevel.name}}</span>
               </ng-container>
             </div>
-          </div>
-          <div class="mb-24" *ngIf="FrameworkRole.length">
+          </div> -->
+          <!-- <div class="mb-24" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.subjects | transposeTerms: 'frmelmnts.lbl.subjects' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8 mb-8 fmedium-list"
               *ngIf="FrameworkRole.length!=0">
@@ -211,8 +247,8 @@
                 <span *ngIf="subject.category === 'subject'"  class="preference-items mb-16 mr-16">{{subject.name}}</span>
               </ng-container>
             </div>
-          </div>
-          <div class="" *ngIf="FrameworkRole.length">
+          </div> -->
+          <!-- <div class="" *ngIf="FrameworkRole.length">
             <div class="fmedium font-w-bold white-space-nowrap">{{resourceService.frmelmnts.lbl.difficultyLevel | transposeTerms: 'frmelmnts.lbl.difficultyLevel' : resourceService?.selectedLang}} :</div>
               <div class="fmedium mt-8 mb-8 fmedium-list"
               *ngIf="FrameworkRole.length!=0">
@@ -220,7 +256,7 @@
                 <span *ngIf="difficultyLevel.category === 'difficultyLevel'"  class="preference-items mb-16 mr-16">{{difficultyLevel.name}}</span>
               </ng-container>
             </div>
-          </div>
+          </div>  -->
         </div>
       </div>
     </div>
