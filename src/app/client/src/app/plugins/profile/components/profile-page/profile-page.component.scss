@@ -226,3 +226,28 @@
     }
   }
 }
+
+.frTitle {
+  border: 1px solid dodgerblue;
+  border-radius: 50%;
+  width: 6%;
+  font-size: 18px;
+  background: aliceblue;
+  text-align: center;
+
+}
+
+.frmDisplay{
+  display: flex;
+  flex-direction: column;
+}
+.activityBadge {
+  font-weight: 400;
+    font-size: 14px;
+    color: #1c5d95;
+    background: #ebf4fb;
+    border-radius: 50px;
+    width: fit-content;
+    padding: 5px 20px;
+    margin: 0 0px 15px -1px;
+}

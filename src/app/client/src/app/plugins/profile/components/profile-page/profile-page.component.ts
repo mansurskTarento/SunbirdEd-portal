@@ -29,6 +29,7 @@ import { CertificateDownloadAsPdfService } from 'sb-svg2pdf';
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { FieldConfig, FieldConfigOption } from '@project-sunbird/common-form-elements';
 import { CsCertificateService } from '@project-sunbird/client-services/services/certificate/interface';
+import { data } from 'jquery';
 
 @Component({
   templateUrl: './profile-page.component.html',
@@ -100,6 +101,27 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   userProfileConfig:{}
   showUserProfileConfig:boolean = true
   FrameworkRole:any;
+  userId:any;
+  userDetails:any;
+  userFrameworkData:any;
+  boardFrameworkData:any;
+  mediumList =[
+    {
+      name:'sohail'
+    },
+    {
+      name:'sohail'
+    },
+    {
+      name:'sohail'
+    }
+  ]
+
+  frameworkRoleList:any;
+  otherFrameworkRoleList:any;
+  subjectDataList:any;
+  otherSubjectFrameworkRoleList:any;
+
 
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,
   public resourceService: ResourceService, public coursesService: CoursesService,
@@ -118,7 +140,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.getFrameworkRoleData()
+    this.populateUserProfile();
     this.isDesktopApp = this.utilService.isDesktopApp;
 
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -169,14 +191,71 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setInteractEventData();
     this.getUserContentConfig();
   } 
-
+ 
+  populateUserProfile(){
+    const option = { userId: this.userService.userid };
+    this.formService.getUserByIdV5(option).subscribe((data)=>{
+      console.log('userDaatattaa',data)
+      if(data){
+        this.userDetails = data?.result?.response;
+        this.userFrameworkData = this.userDetails?.framework?.board[0];
+        console.log('----->>>',this.userFrameworkData)
+        this.getFrameworkRoleData()
+      }
+    })
+  }
 
   getFrameworkRoleData(){
-    const frameworkRoleList = JSON.parse(localStorage.getItem('frameworkRoleData'))
-    console.log('FrameworkRole',frameworkRoleList)
-    const roleData = frameworkRoleList?.terms[0]?.associations
-    this.FrameworkRole = roleData?.filter(data=>data?.category === 'medium' || data?.category === 'gradeLevel' || data?.category === 'subject' || data?.category === 'difficultyLevel')
-    console.log('roleData', this.FrameworkRole)
+    this.frameworkRoleList = JSON.parse(localStorage.getItem('frameworkRoleData'))
+    console.log('FrameworkRole',this.frameworkRoleList)
+    const frameListData= this.frameworkRoleList
+    // const roleData = frameworkRoleList?.terms[0]?.associations
+    // this.FrameworkRole = roleData?.filter(data=>data?.category === 'medium' || data?.category === 'gradeLevel' || data?.category === 'subject' || data?.category === 'difficultyLevel')
+    // console.log('roleData', this.FrameworkRole)
+    const boardDataTerms = frameListData?.filter(item => item.code === 'board');
+    this.boardFrameworkData = boardDataTerms[0]?.terms.filter(item=> item.name === this.userFrameworkData);
+    const roleData = this.boardFrameworkData[0]?.associations
+    this.FrameworkRole = roleData?.filter(data=>data?.category === 'medium'); 
+
+    console.log('!!!!',boardDataTerms)
+    console.log('11111',this.frameworkRoleList)
+    console.log(this.boardFrameworkData); 
+    console.log(this.FrameworkRole);      
+  }
+
+  panelClicked(item){
+    console.log(this.frameworkRoleList);
+    let mediumData = []
+     this.frameworkRoleList.forEach((data)=>{
+      if(data.code === 'medium'){
+        data.terms.forEach((term)=>{
+          if(term.identifier === item.identifier ){
+            mediumData.push(term)
+          }
+        })
+      }
+    });
+    console.log(mediumData)
+    const mediumRoleData = mediumData[0]?.associations
+    this.otherFrameworkRoleList = mediumRoleData?.filter(data=>data?.category === 'medium' || data?.category === 'gradeLevel'); 
+    this.subjectDataList = mediumRoleData?.filter(data=>data?.category === 'subject')
+   console.log(item);
+  }
+
+  compPanelClicked(item){
+   let subjectData = []
+   this.frameworkRoleList.forEach((data)=>{
+    if(data.code === 'subject'){
+      data.terms.forEach((term)=>{
+        if(term.identifier === item.identifier ){
+          subjectData.push(term)
+        }
+      })
+    }
+  });
+
+  const SubjectRoleData = subjectData[0]?.associations;
+  this.otherSubjectFrameworkRoleList = SubjectRoleData?.filter(data=>data?.category === 'difficultyLevel'); 
   }
 
 
@@ -718,5 +797,7 @@ public onLocationModalClose(event) {
     }
   }, 5000);
 }
+
+
 
 }
