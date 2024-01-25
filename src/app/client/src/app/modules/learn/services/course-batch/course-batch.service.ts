@@ -251,5 +251,14 @@ export class CourseBatchService {
       return _.get(response, 'result.batch.participants') || [];
     }));
   }
-
+  
+  uploadCsvFile(data) {
+    const options = {
+      url: this.configService.urlConFig.URLS.QUESTION.BULK_UPLOAD,
+      data: data
+    };
+    return this.learnerService.post(options).pipe(map((response: any) => {
+      return _.get(response, 'result') || [];
+    }));
+  }
 }

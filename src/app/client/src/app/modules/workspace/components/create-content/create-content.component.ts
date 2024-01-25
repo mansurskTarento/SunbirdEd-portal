@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ResourceService, ConfigService, NavigationHelperService } from '@sunbird/shared';
 import { FrameworkService, PermissionService, UserService } from '@sunbird/core';
@@ -72,7 +72,8 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
     frameworkService: FrameworkService, permissionService: PermissionService,
     private activatedRoute: ActivatedRoute, public userService: UserService,
     public navigationhelperService: NavigationHelperService,
-    public workSpaceService: WorkSpaceService) {
+    public workSpaceService: WorkSpaceService,
+    private router:Router) {
     this.resourceService = resourceService;
     this.frameworkService = frameworkService;
     this.permissionService = permissionService;
@@ -100,7 +101,11 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
     );
   }
 
+ 
 
+  navigateTo(){
+    this.router.navigate(['/workspace/uploadQues'])
+  }
 
   ngAfterViewInit () {
     setTimeout(() => {

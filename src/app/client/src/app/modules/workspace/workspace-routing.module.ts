@@ -12,6 +12,7 @@ import {
   ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent, ScoreDetailComponent
 } from './components';
 import { AuthGuard } from '../core/guard/auth-gard.service';
+import { UploadCsvQuestionComponent } from './components/upload-csv-question/upload-csv-question.component';
 const telemetryEnv = 'workspace';
 const objectType = 'workspace';
 const routes: Routes = [
@@ -375,6 +376,16 @@ const routes: Routes = [
           },
       }
     ]
+  },
+  {
+    path: 'uploadQues', component: UploadCsvQuestionComponent,
+    data: {
+      telemetry: {
+        env: telemetryEnv, pageid: 'workspace-uploadQues', subtype: 'paginate', uri: '/workspace/uploadQues',
+        type: 'view', mode: 'create', object: { type: objectType, ver: '1.0' }
+      }, breadcrumbs: [{ label: 'Home', url: '/home' },
+      { label: 'Profile', url: '/profile' }, { label: 'My Workspace', url: '' }]
+    }
   },
   {
     path: 'edit/:type/:contentId/:state/:contentStatus', component: NewCollectionEditorComponent, canActivate: [AuthGuard],
