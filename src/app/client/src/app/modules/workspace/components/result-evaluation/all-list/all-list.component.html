@@ -59,7 +59,7 @@
                 <div>{{student?.addedBy}}</div>
             </td>
             <td>
-                <div>NA</div>
+                <div>{{student?.score !== null ? student?.score : 'NA'}}</div>
             </td>
             <td>
                 <div>{{(student) ? getStatusText(student) : 'Not Assigned'}}</div>

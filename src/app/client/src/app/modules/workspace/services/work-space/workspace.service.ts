@@ -84,7 +84,7 @@ export class WorkSpaceService {
       url: `${this.config.urlConFig.URLS.QUESTIONSET.RETIRE}/${questionSetId}`,
       data: {
         'request': {
-          'questionset': {}
+          'questionset': [`${questionSetId}`]
         }
       }
     };
