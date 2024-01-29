@@ -49,6 +49,9 @@
               [layoutConfiguration]="layoutConfiguration"></app-page-section>
           </div> -->
 
+          <div *ngIf="metricsList && metricsList.length > 0 && getSelectedTab() === 'home'">
+            <app-metrics [metricsList]="metricsList"></app-metrics>
+          </div>
           <!-- Template for displaying sections based on form configuration -->
           <div *ngIf="_currentPageData?.sections && _currentPageData?.isEnabled && isCardDisplay" aria-label="User Preferences">
             <div *ngIf="getSelectedTab() === 'home'"  class="sb-section-preference"
