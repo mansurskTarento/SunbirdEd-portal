@@ -19,6 +19,7 @@ import { ContentIDParam } from '../../interfaces/delteparam';
 */
 
 import { SuiModalService, TemplateModalConfig, ModalTemplate } from 'ng2-semantic-ui-v9';
+import { IUserData } from 'src/app/modules/shared';
 
 /**
  * The rejected  component search for all the rejected component
@@ -169,6 +170,8 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
    */
    public isQuestionSetEnabled: boolean;
 
+   userRoles
+
    showDownloadQrBtn: any = (<HTMLInputElement>document.getElementById('showQrDownloadBtn'))
     ? (<HTMLInputElement>document.getElementById('showQrDownloadBtn')).value : 'true';
 
@@ -224,6 +227,25 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
       });
       this.isRejectedCourse();
   }
+
+  getFormConfigs() {
+        if (!this.userRoles) {
+            if (this.isUserLoggedIn()) {
+                this.userService.userData$.subscribe((profileData: IUserData) => {
+                    if (profileData
+                        && profileData.userProfile
+                        && profileData.userProfile['profileUserType']) {
+                        this.userRoles = profileData.userProfile['roles'].length ? _.map(profileData.userProfile['roles'], 'role') : [];
+                    }
+                });
+            }
+        }
+}
+
+public isUserLoggedIn(): boolean {
+  return this.userService && (this.userService.loggedIn || false);
+}
+
   isRejectedCourse() {
     const searchParams = {
       filters: {
@@ -315,7 +337,7 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
           this.showLoader = false;
           this.noResult = true;
           this.noResultMessage = {
-            'messageText': 'messages.stmsg.m0022'
+            'messageText': 'messages.stmsg.m0201'
           };
         }
       },
