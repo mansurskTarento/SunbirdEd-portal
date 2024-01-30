@@ -9,7 +9,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 import { cloneDeep, get, find, map as _map, pick, omit, groupBy, sortBy, replace, uniqBy, forEach, has, uniq, flatten, each, isNumber, toString, partition, toLower, includes } from 'lodash-es';
 import { IInteractEventEdata, IImpressionEventInput, TelemetryService } from '@sunbird/telemetry';
-import { map, tap, switchMap, skipWhile, takeUntil, catchError, startWith } from 'rxjs/operators';
+import { map, tap, switchMap, skipWhile, takeUntil, catchError, startWith, mergeMap } from 'rxjs/operators';
 import { ContentSearchService } from '@sunbird/content-search';
 import { ContentManagerService } from '../../../public/module/offline/services';
 import * as _ from 'lodash-es';
@@ -92,7 +92,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     Categorytheme: any;
     filterResponseData = {};
     refreshFilter: boolean = true;
-    isCardDisplay:boolean = false;
+    isCardDisplay: boolean = false;
+    metricsList: any = [];
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
@@ -253,6 +254,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
         });
+
+        this.getMetrics();
     }
 
     public fetchEnrolledCoursesSection() {
@@ -299,7 +302,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         //     return formatedContent;
 
                         // }
-                       
                     });
                     let selectedTab = this.getSelectedTab()
                     if(selectedTab !=='home'){
@@ -336,7 +338,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.FIRST_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, this.layoutConfiguration, COLUMN_TYPE.threeToNine, true);
                 this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(1, this.layoutConfiguration, COLUMN_TYPE.threeToNine, true);
             } else {
-                if(contentType !== 'home' && contentType !== 'explore'){
+                if (contentType !== 'home' && contentType !== 'explore'){
 
                     this.FIRST_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, {"source": "","name": "newLayout","options": "","layout":"v2"}, COLUMN_TYPE.nineToThree, true);
                     this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(1, {"source": "","name": "newLayout","options": "","layout":"v2"}, COLUMN_TYPE.nineToThree, true);
@@ -484,7 +486,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
-                        _.filter(Object.keys(params),filterValue => { 
+                        _.filter(Object.keys(params),filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {
                                 let param = {};
                                 param[filterValue] = (typeof (params[filterValue]) === "string") ? params[filterValue].split(',') : params[filterValue];
@@ -754,6 +756,63 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.addHoverData();
             }
         });
+    }
+
+    getMetrics() {
+        if (true) {
+            const formBody = {
+                "request": {
+                    "filters": {
+                        "status": []
+                    },
+                    "limit": 0,
+                    "facets": [
+                        "status"
+                    ]
+                }
+            }
+            this.searchService.getMetrics(formBody)
+                .pipe((mergeMap(response => {
+                    const formatedMetricsList = []
+                    const metricsList = _.get(response, 'result.facets[0].values', []);
+                    metricsList.forEach((metrics) => {
+                        let formatedMetrics = undefined;
+                        switch (metrics.name) {
+                            case 'draft':
+                                formatedMetrics = {
+                                    name: 'Number of questions created',
+                                    count: metrics.count
+                                }
+                                break;
+                            case 'live':
+                                formatedMetrics = {
+                                    name: 'Number of questions approved',
+                                    count: metrics.count
+                                }
+                                break;
+                            case 'rejected':
+                                formatedMetrics = {
+                                    name: 'Number of questions rejected',
+                                    count: metrics.count
+                                }
+                                break;
+                            case 'review':
+                                formatedMetrics = {
+                                    name: 'Number of questions pending for review',
+                                    count: metrics.count
+                                }
+                                break;
+                        }
+                        if(formatedMetrics) {
+                            formatedMetricsList.push(formatedMetrics);
+                        }
+                    })
+                    return of(formatedMetricsList)
+                })))
+                .subscribe((res) => {
+                    this.metricsList = res;
+                })
+        }
     }
 
     private setNoResultMessage() {

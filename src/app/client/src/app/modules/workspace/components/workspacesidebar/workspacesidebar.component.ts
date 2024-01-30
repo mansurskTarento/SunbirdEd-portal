@@ -6,6 +6,7 @@ import { WorkSpaceService } from './../../services';
 import { Observable, observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
+import * as _ from 'lodash-es'
 /**
  * The Workspace side  component shows the sidebar for workspace
  */
@@ -44,6 +45,10 @@ export class WorkspacesidebarComponent implements OnInit {
  * publishedRole  access roles
  */
   publishedRole: Array<string>;
+   /**
+ * rejectedRole  access roles
+ */
+   rejectedRole: Array<string>;
   /**
   * alluploadsRole  access roles
   */
@@ -98,6 +103,8 @@ export class WorkspacesidebarComponent implements OnInit {
    */
   private router: Router;
 
+  allRejectedRole: Array<string>;
+
   /**
    * Roles to show only for the Nodal officer.
    * @type {Array<string>}
@@ -137,6 +144,7 @@ export class WorkspacesidebarComponent implements OnInit {
     this.draftRole = this.config.rolesConfig.workSpaceRole.draftRole;
     this.inreviewRole = this.config.rolesConfig.workSpaceRole.inreviewRole;
     this.publishedRole = this.config.rolesConfig.workSpaceRole.publishedRole;
+    this.rejectedRole = this.config.rolesConfig.workSpaceRole.rejectedRole;
     this.alluploadsRole = this.config.rolesConfig.workSpaceRole.alluploadsRole;
     this.upForReviewRole = this.config.rolesConfig.workSpaceRole.upForReviewRole;
     this.courseBatchRoles = this.config.rolesConfig.workSpaceRole.courseBatchRoles;
@@ -148,6 +156,7 @@ export class WorkspacesidebarComponent implements OnInit {
     this.collaboratingRole = this.config.rolesConfig.workSpaceRole.collaboratingRole;
     this.nodalOfficerRole = this.config.rolesConfig.workSpaceRole.nodalOfficer;
     this.resultEvaluationRole  = this.config.rolesConfig.workSpaceRole.resultEvaluationRole;
+    this.allRejectedRole = _.get(this.config, 'rolesConfig.workSpaceRole.allRejectedRole')
   }
 
   setInteractData(id) {

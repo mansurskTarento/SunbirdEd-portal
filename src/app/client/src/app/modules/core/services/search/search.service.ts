@@ -10,6 +10,7 @@ import { LearnerService } from './../learner/learner.service';
 import { PublicDataService } from './../public-data/public-data.service';
 import * as _ from 'lodash-es';
 import { FormService } from './../form/form.service';
+import { ActionService } from '@sunbird/core';
 /**
  * Service to search content
  */
@@ -49,6 +50,7 @@ export class SearchService {
   public publicDataService: PublicDataService;
   public resourceService: ResourceService;
   private _subjectThemeAndCourse: object;
+
   /**
    * Default method of OrganisationService class
    *
@@ -59,7 +61,8 @@ export class SearchService {
    */
   constructor(user: UserService, content: ContentService, config: ConfigService,
     learnerService: LearnerService, publicDataService: PublicDataService,
-    resourceService: ResourceService, private formService: FormService) {
+    resourceService: ResourceService, private formService: FormService,
+    private actionService: ActionService) {
     this.user = user;
     this.content = content;
     this.config = config;
@@ -600,4 +603,13 @@ export class SearchService {
   };
   return this.learnerService.post(option);
 }
+
+  getMetrics(formBody: any) {
+    const options = {
+      url: this.config.urlConFig.URLS.METRICS,
+      data: formBody
+    }
+
+    return this.actionService.post(options)
+  }
 }

@@ -390,7 +390,8 @@
     "UCI": "/uci",
     "COMPETENCY": {
       "READ": "course/v1/passbook/read"
-    }
+    },
+    "METRICS": "composite/v3/search"
 
   }
 }

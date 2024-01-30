@@ -1352,6 +1352,11 @@
     "inPageredirectUrl": "workspace/content/published/1",
     "searchPageredirectUrl": "workspace/content/published/1"
   },
+  "rejected": {
+    "filterType": "rejectedTab",
+    "inPageredirectUrl": "workspace/content/rejected/1",
+    "searchPageredirectUrl": "workspace/content/rejected/1"
+  },
   "collaboration": {
     "filterType": "collaboration",
     "inPageredirectUrl": "workspace/content/collaborating-on/1",

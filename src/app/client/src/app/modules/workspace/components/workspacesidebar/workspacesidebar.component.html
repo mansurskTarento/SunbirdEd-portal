@@ -79,7 +79,7 @@
     [class.active]="router.isActive('/workspace/content/flagged')">
     {{resourceService?.frmelmnts?.snav?.flagged}}
   </a>
-  <a appTelemetryInteract [telemetryInteractEdata]="setInteractData('sharevialink-button')"  class="item" *ngIf='permissionService.permissionAvailable' appPermission [permission]='limitedPublishingRole' [routerLink]="['limited-publish',1]"
+  <!-- <a appTelemetryInteract [telemetryInteractEdata]="setInteractData('sharevialink-button')"  class="item" *ngIf='permissionService.permissionAvailable' appPermission [permission]='limitedPublishingRole' [routerLink]="['limited-publish',1]"
     [class.active]="router.isActive('/workspace/content/limited-publish')"  matTooltip="View content shared via link. This is not searchable until published by submitting for review"
     [matTooltipPosition]="'right'">
    {{resourceService?.frmelmnts?.snav?.shareViaLink}}
@@ -87,5 +87,10 @@
   <a appTelemetryInteract [telemetryInteractEdata]="setInteractData('collaborations-button')"  class="item" *ngIf='permissionService.permissionAvailable' appPermission [permission]='collaboratingRole' [routerLink]="['collaborating-on',1]"
   [class.active]="router.isActive('/workspace/content/collaborating-on')"  matTooltip="View content you are collaborating on" [matTooltipPosition]="'right'">
  {{resourceService?.frmelmnts?.snav?.Collaboratingon}}
-</a>
+</a> -->
+<a appTelemetryInteract [telemetryInteractEdata]="setInteractData('publish-button')"  class="item" *ngIf='permissionService.permissionAvailable' appPermission [permission]='rejectedRole' [routerLink]="['rejected',1]"
+    [class.active]="router.isActive('/workspace/content/rejected')"  matTooltip="View all your rejected content"
+    [matTooltipPosition]="'right'">
+   Rejected
+  </a>
 </div>

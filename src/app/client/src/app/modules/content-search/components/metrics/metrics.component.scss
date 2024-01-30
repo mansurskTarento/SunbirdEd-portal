@@ -1,0 +1,18 @@
+.metricsTitle {
+    font-family: inherit;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex: 1;
+    height: 1.5rem;
+    color: var(--cc-lb-card-grid-title);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    line-height: 1.625rem;
+    display: flex;
+    align-items: center;
+}
+
+.count {
+    font-weight: 600;
+}

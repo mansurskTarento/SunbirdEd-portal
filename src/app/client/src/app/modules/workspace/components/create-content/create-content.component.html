@@ -93,7 +93,7 @@
             <p class="workspaceinstuction">{{resourceService?.frmelmnts?.lbl?.contentuploaddescription}}</p>
           </div>
           <!-- Assessment -->
-          <div class="three wide column" *ngIf='permissionService.permissionAvailable && (enableWorkspaceList ? enableWorkspaceList?.courseAssessment : true)' appPermission
+          <!-- <div class="three wide column" *ngIf='permissionService.permissionAvailable && (enableWorkspaceList ? enableWorkspaceList?.courseAssessment : true)' appPermission
             [permission]='assessmentRole'>
             <div class="ui link card" routerLink="assessment" appTelemetryInteract
               [telemetryInteractEdata]="{id:'createAssessment',type:'click',pageid:'create-assessment'}" [telemetryInteractCdata]="[{ id: 'user:workspace:assessment:create', type: 'Feature' }, { id: 'SB-17206', type: 'Task' }]">
@@ -105,7 +105,7 @@
               </div>
             </div>
             <p class="workspaceinstuction">{{resourceService?.frmelmnts?.lbl?.assessmentdescription}}</p>
-          </div>
+          </div> -->
           <div class="three wide column" *ngIf='permissionService.permissionAvailable && enableQuestionSetCreation === true' appPermission
             [permission]='textBookRole'>
             <div class="ui link card" routerLink="questionset">

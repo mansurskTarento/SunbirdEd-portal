@@ -9,7 +9,7 @@ import {
   FlagConentplayerComponent, PublishedPopupComponent, RequestChangesPopupComponent, LimitedPublishedComponent,
   AllContentComponent, FlagReviewerComponent, CollaboratingOnComponent, AllTextbooksComponent, NewCollectionEditorComponent, 
   AssignAssessmentsComponent, AssessmentsListComponent, StudentsListComponent, PendingForSubmissionListComponent, ResultEvaluationComponent,
-  ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent, ScoreDetailComponent
+  ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent, ScoreDetailComponent, RejectedComponent
 } from './components';
 import { AuthGuard } from '../core/guard/auth-gard.service';
 import { UploadCsvQuestionComponent } from './components/upload-csv-question/upload-csv-question.component';
@@ -374,7 +374,17 @@ const routes: Routes = [
               type: 'detail', mode: 'view', object: { type: objectType, ver: '1.0' }
             }, roles: 'resultEvaluationRole',
           },
-      }
+      },
+      {
+        path: 'rejected/:pageNumber', component: RejectedComponent, canActivate: [AuthGuard],
+        data: {
+          telemetry: {
+            env: telemetryEnv, pageid: 'workspace-content-rejected', uri: '/workspace/content/rejected',
+            type: 'list', mode: 'create', object: { type: objectType, ver: '1.0' }
+          }, roles: 'rejectedRole',
+          breadcrumbs: [{ label: 'Home', url: '/home' }, { label: 'Rejected', url: '/reject' }, { label: 'My Workspace', url: '' }]
+        }
+      },
     ]
   },
   {

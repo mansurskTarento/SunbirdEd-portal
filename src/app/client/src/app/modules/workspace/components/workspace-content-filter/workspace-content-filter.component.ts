@@ -171,6 +171,9 @@ export class WorkspaceContentFilterComponent implements OnInit {
     else if(_.includes(this.route.url, 'content/uploaded')){
       this.filterType = this.config.appConfig.uploaded.filterType;
       this.redirectUrl = this.config.appConfig.uploaded.inPageredirectUrl;
+    } else if (_.includes(this.route.url, 'rejected')) {
+      this.filterType = this.config.appConfig.rejected.filterType;
+      this.redirectUrl = this.config.appConfig.rejected.inPageredirectUrl;
     }
      else {
       this.filterType = this.config.appConfig.allmycontent.filterType;

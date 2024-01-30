@@ -1,0 +1,14 @@
+<div>
+    <div class="header">
+        <div class="metricsTitle">
+            Metrics
+        </div>
+    </div>
+    <div class="mt-16">
+        <ng-container *ngFor="let metrics of metricsList">
+            <div class="mt-8">
+                <span>{{metrics.name}}: </span> <span class="count">{{metrics.count}}</span>
+            </div>
+        </ng-container>
+    </div>
+</div>

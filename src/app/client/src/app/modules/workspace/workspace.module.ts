@@ -22,7 +22,7 @@ import {
   AssessmentsListComponent, StudentsListComponent, AssignAssessmentsComponent,
   PendingForSubmissionListComponent,
   ResultEvaluationComponent, ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent,
-  ScoreDetailComponent
+  ScoreDetailComponent, RejectedComponent
 } from './components';
 import { DateFilterXtimeAgoPipe } from './pipes';
 import { NgInviewModule } from 'angular-inport';
@@ -84,6 +84,7 @@ import { UploadCsvQuestionComponent } from './components/upload-csv-question/upl
     PendingForSubmissionListComponent,
     ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent,
     ScoreDetailComponent,
+    RejectedComponent,
     UploadCsvQuestionComponent
   ],
   providers: [WorkSpaceService, EditorService, BatchService, ReviewCommentsService, DateFilterXtimeAgoPipe]
