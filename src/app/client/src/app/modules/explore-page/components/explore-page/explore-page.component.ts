@@ -94,6 +94,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     refreshFilter: boolean = true;
     isCardDisplay: boolean = false;
     metricsList: any = [];
+    userRoles: any = []
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
@@ -255,7 +256,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.addHoverData();
         });
 
-        this.getMetrics();
     }
 
     public fetchEnrolledCoursesSection() {
@@ -631,6 +631,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             && profileData.userProfile
                             && profileData.userProfile['profileUserType']) {
                             this.userType = profileData.userProfile['profileUserType']['type'];
+                            this.userRoles = profileData.userProfile['roles'].length ? _.map(profileData.userProfile['roles'], 'role') : [];
+                            this.getMetrics()
                         }
                     });
                 } else {
@@ -759,7 +761,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getMetrics() {
-        if (true) {
+        const permitedRoles = ['CONTENT_CREATOR', 'CONTENT_REVIEWER']
+        const isCreator = this.userRoles.includes ('CONTENT_CREATOR')
+        if (this.userRoles.some(role => permitedRoles.includes(role))) {
             const formBody = {
                 "request": {
                     "filters": {
@@ -790,18 +794,22 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                                     count: metrics.count
                                 }
                                 break;
-                            case 'rejected':
-                                formatedMetrics = {
-                                    name: 'Number of questions rejected',
-                                    count: metrics.count
-                                }
-                                break;
-                            case 'review':
-                                formatedMetrics = {
-                                    name: 'Number of questions pending for review',
-                                    count: metrics.count
-                                }
-                                break;
+                        }
+                        if(isCreator) {
+                            switch (metrics.name) {
+                                case 'rejected':
+                                    formatedMetrics = {
+                                        name: 'Number of questions rejected',
+                                        count: metrics.count
+                                    }
+                                    break;
+                                case 'review':
+                                    formatedMetrics = {
+                                        name: 'Number of questions pending for review',
+                                        count: metrics.count
+                                    }
+                                    break;
+                            }
                         }
                         if(formatedMetrics) {
                             formatedMetricsList.push(formatedMetrics);
