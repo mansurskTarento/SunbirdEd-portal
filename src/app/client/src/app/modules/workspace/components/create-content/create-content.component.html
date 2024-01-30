@@ -132,6 +132,19 @@
             </div>
             <p class="workspaceinstuction">Create Questionset Blueprint</p>
           </div>
+          <div class="three wide column" *ngIf='permissionService.permissionAvailable' appPermission
+            [permission]='textBookRole'>
+            <div class="ui link card" (click)="navigateTo()">
+              <div class="content" appTelemetryInteract
+                [telemetryInteractEdata]="{id:'uploadQuestion',type:'click',pageid:'workspace-uploadQues'}">
+                <div class="textcontent">
+                  <i class='my-icon file text outline icon'></i>
+                  <span class="my-text">Upload question</span>
+                </div>
+              </div>
+            </div>
+            <p class="workspaceinstuction">Upload question</p>
+          </div>
         </div>
       </div>
       

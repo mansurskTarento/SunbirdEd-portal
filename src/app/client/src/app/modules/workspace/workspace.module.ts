@@ -35,6 +35,7 @@ import { ContentSearchModule } from '@sunbird/content-search';
 import { CollectionEditorLibraryModule } from 'upsmf-collection-editor';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule} from '@angular/material/menu';
+import { UploadCsvQuestionComponent } from './components/upload-csv-question/upload-csv-question.component';
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import { MatMenuModule} from '@angular/material/menu';
     PendingForSubmissionListComponent,
     ResultEvalutionAllListComponent, ResultEvalutionPendingListComponent,
     ScoreDetailComponent,
-    RejectedComponent
+    RejectedComponent,
+    UploadCsvQuestionComponent
   ],
   providers: [WorkSpaceService, EditorService, BatchService, ReviewCommentsService, DateFilterXtimeAgoPipe]
 })
