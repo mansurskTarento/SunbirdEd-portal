@@ -52,10 +52,10 @@
                 <div matTooltip="{{student?.comment?.ORG_ADMIN}}" [matTooltipPosition]="'right'">{{student?.comment?.ORG_ADMIN}}</div>
             </td>
             <td>
-                <div>{{student?.addedBy}}</div>
+                <div>{{student?.nodalname}}</div>
             </td>
             <td>
-                <div>NA</div>
+                <div>{{student?.score !== null ? student?.score : 'NA'}}</div>
             </td>
             <td>
                 <div>{{(student) ? getStatusText(student) : 'Not Assigned'}}</div>
