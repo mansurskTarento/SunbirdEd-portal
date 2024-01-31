@@ -142,6 +142,7 @@ export class MainHeaderComponent implements OnInit, OnDestroy {
   themeSwitchInteractEdata: IInteractEventEdata;
   signInIntractEdata: IInteractEventEdata;
   hrefPath = '/resources';
+  registerPath= '/signup';
   helpLinkVisibility: string;
   isFullScreenView;
   public unsubscribe$ = new Subject<void>();
