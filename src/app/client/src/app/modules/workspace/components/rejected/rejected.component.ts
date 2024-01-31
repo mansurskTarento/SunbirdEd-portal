@@ -19,7 +19,6 @@ import { ContentIDParam } from '../../interfaces/delteparam';
 */
 
 import { SuiModalService, TemplateModalConfig, ModalTemplate } from 'ng2-semantic-ui-v9';
-import { IUserData } from 'src/app/modules/shared';
 
 /**
  * The rejected  component search for all the rejected component
@@ -231,7 +230,7 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
   getFormConfigs() {
         if (!this.userRoles) {
             if (this.isUserLoggedIn()) {
-                this.userService.userData$.subscribe((profileData: IUserData) => {
+                this.userService.userData$.subscribe((profileData: any) => {
                     if (profileData
                         && profileData.userProfile
                         && profileData.userProfile['profileUserType']) {

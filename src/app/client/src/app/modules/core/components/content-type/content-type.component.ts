@@ -167,6 +167,8 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
     const piaaIndex = this.contentTypes.findIndex(cty => cty.contentType === 'piaaAssessment');
     const workspaceIndex = this.contentTypes.findIndex(cty => cty.contentType === 'workspace');
     const resultEvaluationIndex = this.contentTypes.findIndex(cty => cty.contentType === 'resultEvaluation');
+    const courseIndex = this.contentTypes.findIndex(cty => cty.contentType === 'course');
+    const practiceQuestionSerIndex = this.contentTypes.findIndex(cty => cty.contentType === 'questionSets');
 
     if (this.userType != 'administrator' && index !== -1) {
       this.contentTypes[index].isEnabled = false;
@@ -187,6 +189,15 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
 
     if( ((!_.isEmpty(this.userRoles) &&  !_.includes(this.userRoles, 'ORG_ADMIN') ) || _.isEmpty(this.userRoles)) && resultEvaluationIndex !== -1){
       this.contentTypes[resultEvaluationIndex].isEnabled = false;
+    } 
+
+    if( (!_.isEmpty(this.userRoles) &&  _.includes(this.userRoles, 'ORG_ADMIN'))){
+      if (courseIndex > -1 ) {
+        this.contentTypes[courseIndex].isEnabled = false;
+      }
+      if (practiceQuestionSerIndex > -1 ) {
+        this.contentTypes[practiceQuestionSerIndex].isEnabled = false;
+      }
     } 
 
     if( (!_.isEmpty(this.userRoles) &&  _.includes(this.userRoles, 'PIAA_SETTER')  ) && workspaceIndex !== -1){

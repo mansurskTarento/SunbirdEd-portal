@@ -38,7 +38,7 @@
         </div>
         <div   class="p-0 d-flex flex-jc-flex-end flex-ai-center"
           [ngClass]="isDesktopApp ? 'seven wide column sb-desktop-header-list-items' : 'ten wide column sb-header-list-items'">
-          <ng-container  *ngIf="userService?.loggedIn;else login" >
+          <ng-container  *ngIf="userService?.loggedIn;else showLoginRegisterTemplates" >
                 <!--Hamburger Icon-->
               <!--
               <i class="large bars icon link primary-color mobile only" (click)="showSideBar()" tabindex="0"></i>
@@ -68,9 +68,10 @@
               </a>
               <!--/Avtar Dropdown-->
           </ng-container>
-          <ng-template #login>
+          <ng-template #showLoginRegisterTemplates>
             <!-- <a href="/login" class="sb-btn sb-btn-primary p-8">{{resourceService?.frmelmnts?.btn?.studentLogin}}</a> -->
             <a (click)="doLogin()" href={{hrefPath}} class="sb-btn sb-btn-primary p-8 ml-16">{{resourceService?.frmelmnts?.btn?.login}}</a>
+            <a href={{registerPath}} class="sb-btn sb-btn-primary p-8 ml-16">{{resourceService?.frmelmnts?.lbl?.register}}</a>
           </ng-template>
           <!-- <button *ngIf="!userService?.loggedIn">
             <a (click)="doSignUp()" class="sb-btn sb-btn-primary p-8 ml-16">{{'signUp'}}</a>
