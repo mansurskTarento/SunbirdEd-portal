@@ -198,9 +198,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('userDaatattaa',data)
       if(data){
         this.userDetails = data?.result?.response;
-        this.userFrameworkData = this.userDetails?.framework?.board[0];
+        if(Object.keys(this.userDetails?.framework).length!= 0){
+          this.userFrameworkData = this.userDetails?.framework?.board[0]
+          this.getFrameworkRoleData()
+        }
         console.log('----->>>',this.userFrameworkData)
-        this.getFrameworkRoleData()
+        
       }
     })
   }
