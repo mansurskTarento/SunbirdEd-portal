@@ -1,6 +1,6 @@
 
 import { Injectable, EventEmitter } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, NavigationStart, NavigationCancel } from '@angular/router';
 import { CacheService } from 'ng2-cache-service';
 import * as _ from 'lodash-es';
 import { UtilService } from '../util/util.service';
@@ -62,6 +62,17 @@ export class NavigationHelperService {
         this.pageStartTime = Date.now();
       } else if (e instanceof NavigationEnd) {
         const urlAfterRedirects = e;
+        pushUrlHistory(urlAfterRedirects);
+      }
+      else if(e instanceof NavigationCancel){
+        const urlAfterRedirects = e;
+        if(_.includes(urlAfterRedirects.url, 'search/Library'))
+        {
+          pushUrlHistory(urlAfterRedirects);
+        }
+      }
+
+      function pushUrlHistory(urlAfterRedirects: NavigationEnd | NavigationCancel) {
         const queryParams = this.activatedRoute.root.children[this.activatedRoute.root.children.length - 1].snapshot.queryParams;
         const url = urlAfterRedirects.url.split('?')[0];
         let history: UrlHistory;
