@@ -165,7 +165,7 @@ getAllOpenBatches(contents) {
   }
 
   canCreateBatch(courseHierarchy) {
-    return (this.isTrackableCollection(courseHierarchy) && this.permissionService.checkRolesPermissions(['CONTENT_CREATOR','CONTENT_REVIEWER',])
+    return (this.isTrackableCollection(courseHierarchy) && this.permissionService.checkRolesPermissions(['CONTENT_CREATOR','CONTENT_REVIEWER','PIAA_SETTER'])
       // && this.userService.userid === _.get(courseHierarchy, 'createdBy')
       );
   }

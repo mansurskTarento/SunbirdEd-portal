@@ -764,17 +764,45 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         const permitedRoles = ['CONTENT_CREATOR', 'CONTENT_REVIEWER']
         const isCreator = this.userRoles.includes ('CONTENT_CREATOR')
         if (this.userRoles.some(role => permitedRoles.includes(role))) {
-            const formBody = {
-                "request": {
-                    "filters": {
-                        "status": []
-                    },
-                    "limit": 0,
-                    "facets": [
-                        "status"
-                    ]
-                }
-            }
+            var formBody = {}
+            if (!isCreator){
+                formBody = {
+                   "request": {
+                       "filters": {
+                           "status": [],
+                           "reviewerId":this.userService.userid
+                       },
+                       "limit": 0,
+                       "facets": [
+                           "status"
+                       ]
+                   }
+               }
+           }else{
+               formBody = {
+                   "request": {
+                       "filters": {
+                           "status": [],
+                           "createdBy":this.userService.userid
+                       },
+                       "limit": 0,
+                       "facets": [
+                           "status"
+                       ]
+                   }
+               }
+           }
+            // const formBody = {
+            //     "request": {
+            //         "filters": {
+            //             "status": []
+            //         },
+            //         "limit": 0,
+            //         "facets": [
+            //             "status"
+            //         ]
+            //     }
+            // }
             this.searchService.getMetrics(formBody)
                 .pipe((mergeMap(response => {
                     const formatedMetricsList = []
