@@ -178,10 +178,14 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
         this.contentTypes[index].isEnabled = true;
       }
     }
-
-    if( (!_.isEmpty(this.userRoles) &&  !_.includes(this.userRoles, 'PUBLIC') &&  !_.includes(this.userRoles, 'CONTENT_CREATOR') )  && piaaIndex !== -1){
+    // 'PIAA_SETTER','CONTENT_REVIEWER'
+    if( (!_.isEmpty(this.userRoles) &&  !_.includes(this.userRoles, 'PUBLIC') &&  !_.includes(this.userRoles, 'CONTENT_CREATOR') && !_.includes(this.userRoles, 'CONTENT_REVIEWER') && !_.includes(this.userRoles, 'PIAA_SETTER') )  && piaaIndex !== -1){
       this.contentTypes[piaaIndex].isEnabled = false;
     }
+    if( (!_.isEmpty(this.userRoles) && _.includes(this.userRoles, 'PIAA_SETTER') )  && piaaIndex !== -1){
+      this.contentTypes[piaaIndex].isEnabled = true;
+    }
+    
 
     if( ((!_.isEmpty(this.userRoles) &&  (!_.includes(this.userRoles, 'NODAL_OFFICER') && !_.includes(this.userRoles, 'PIAA_SETTER')) ) || _.isEmpty(this.userRoles)) && workspaceIndex !== -1){
       this.contentTypes[workspaceIndex].isEnabled = false
