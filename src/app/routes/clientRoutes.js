@@ -116,6 +116,15 @@ module.exports = (app, keycloak) => {
     store: memoryStore
   }), keycloak.middleware({ admin: '/callback', logout: '/logout' }), keycloak.protect(), indexPage(true));
 
+  app.all(['/register'],session({
+    secret: envHelper.PORTAL_SESSION_SECRET_KEY,
+    resave: false,
+    cookie: {
+      maxAge: envHelper.sunbird_session_tl
+    },
+    saveUninitialized: false,
+    store: memoryStore}),
+    keycloak.middleware({ admin: '/callback', logout: '/logout' }),redirectToSignUp)
   // all public route should also have same route prefixed with slug
   app.all(['/', '/get', '/:slug/get', '/:slug/get/dial/:dialCode',  '/get/dial/:dialCode', '/explore',
     '/explore/*', '/:slug/explore', '/:slug/explore/*', '/play/*', '/:slug/play/*',  '/explore-course', '/explore-course/*',
@@ -290,7 +299,7 @@ const loadTenantFromLocal = (req, res) => {
 }
 const redirectTologgedInPage = (req, res) => {
 	let redirectRoutes = { '/explore': '/resources', '/explore/1': '/search/Library/1', '/explore-course': '/learn', '/explore-course/1': '/search/Courses/1', '/guest-profile': '/profile', '/explore-groups': '/my-groups' };
-	if (req.params.slug) {
+	  if (req.params.slug) {
 		redirectRoutes = {
 			[`/${req.params.slug}/explore`]: '/resources',
 			[`/${req.params.slug}/explore-course`]: '/learn'
@@ -352,6 +361,15 @@ const redirectToLogin = (req, res) => {
   const redirectUrl = req.query.redirectUri || '/resources';
   const url = `${envHelper.PORTAL_AUTH_SERVER_URL}/realms/${envHelper.PORTAL_REALM}/protocol/openid-connect/auth`;
   const query = `?client_id=portal&state=3c9a2d1b-ede9-4e6d-a496-068a490172ee&redirect_uri=https://${req.get('host')}/${redirectUrl}&scope=openid&version=${CONSTANTS.KEYCLOAK.VERSION}&response_type=code&error_message=${req.query.error_message}`;
+  res.redirect(url + query);
+};
+
+const redirectToSignUp = (req, res) => {
+  const protocol = req.connection.encrypted ? 'https:' : 'http:';
+  const host = `${protocol}//${req.headers.host}`;
+  const redirectUrl = `${host}/resources/auth_callback=1`;
+  const url = `${host}/signup`;
+  const query = `?client_id=portal&state=ba7999dd-65e4-4ee5-9208-e740506a7538&redirect_uri=${redirectUrl}&scope=openid&version=${CONSTANTS.KEYCLOAK.VERSION}&response_type=code&error_callback=${host}/resources`;
   res.redirect(url + query);
 };
 
