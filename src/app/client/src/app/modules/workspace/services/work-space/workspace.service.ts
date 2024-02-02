@@ -88,7 +88,7 @@ export class WorkSpaceService {
         }
       }
     };
-    return this.publicDataService.delete(option);
+    return this.content.delete(option);
   }
 
 
@@ -127,10 +127,10 @@ export class WorkSpaceService {
 */
   openCollectionEditor(content, state) {
     let navigationParams = ['/workspace/content/edit/collection', content.identifier, content.contentType, state, content?.targetFWIds?.[0]];
-    if ((_.toLower(content.contentType) === 'course' && _.toLower(content.primaryCategory) === 'course'
-    ) || _.toLower(content.contentType) === 'collection' || _.toLower(content.contentType) === 'textbook') {
+    if ((_.toLower(content.contentType) === 'course' && _.toLower(content.primaryCategory) === 'course' || 'PIAA Assessment' || 'Self Assessment') || _.toLower(content.contentType) === 'collection' || _.toLower(content.contentType) === 'textbook') {
       navigationParams = ['workspace/edit/', content.contentType, content.identifier, state];
     }
+    // (_.toLower(content.primaryCategory) === 'course' || _.toLower(content.primaryCategory) === 'PIAA Assessment' || _.toLower(content.primaryCategory) === 'Self Assessment' )
     if (content.status) {
       navigationParams.push(content.status);
     }
