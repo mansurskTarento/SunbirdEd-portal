@@ -1,6 +1,6 @@
 
 import { Injectable, EventEmitter } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, NavigationStart, NavigationCancel } from '@angular/router';
 import { CacheService } from 'ng2-cache-service';
 import * as _ from 'lodash-es';
 import { UtilService } from '../util/util.service';
@@ -64,20 +64,32 @@ export class NavigationHelperService {
         const urlAfterRedirects = e;
         const queryParams = this.activatedRoute.root.children[this.activatedRoute.root.children.length - 1].snapshot.queryParams;
         const url = urlAfterRedirects.url.split('?')[0];
-        let history: UrlHistory;
-        if (_.isEmpty(queryParams)) {
-          history = {url};
-        } else {
-          history = {url, queryParams};
-        }
-        const previousUrl = this._history.pop();
-        if (previousUrl === undefined || (previousUrl && previousUrl.url === history.url )) {
-          this._history.push(history);
-        } else {
-          this._history.push(previousUrl, history);
+        this.pushUrlToHistory(queryParams, url);
+      }
+      else if(e instanceof NavigationCancel){
+        const urlAfterRedirects = e;
+        if(_.includes(urlAfterRedirects.url, 'search/Library'))
+        {
+          const queryParams = this.activatedRoute.root.children[this.activatedRoute.root.children.length - 1].snapshot.queryParams;
+          const url = urlAfterRedirects.url.split('?')[0];
+          this.pushUrlToHistory(queryParams, url);
         }
       }
     });
+  }
+  private pushUrlToHistory(queryParams, url: string):void {
+    let history: UrlHistory;
+    if (_.isEmpty(queryParams)) {
+      history = {url};
+    } else {
+      history = {url, queryParams};
+    }
+    const previousUrl = this._history.pop();
+    if (previousUrl === undefined || (previousUrl && previousUrl.url === history.url )) {
+      this._history.push(history);
+    } else {
+      this._history.push(previousUrl, history);
+    }
   }
   storeResourceCloseUrl() {
     this._resourceCloseUrl = this._history[this._history.length - 1];
