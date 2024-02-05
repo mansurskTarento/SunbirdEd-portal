@@ -545,4 +545,10 @@ export class CourseConsumptionHeaderComponent implements OnInit, AfterViewInit, 
         this.toasterService.error(this.resourceService.messages.fmsg.m0004);
       });
   }
+
+  isReviewerOrCreator(){
+    const isCreator = this.permissionService.checkRolesPermissions(['CONTENT_CREATOR']);
+    const isReviewer = this.permissionService.checkRolesPermissions(['CONTENT_REVIEWER']);
+    return isCreator||isReviewer;
+  }
 }

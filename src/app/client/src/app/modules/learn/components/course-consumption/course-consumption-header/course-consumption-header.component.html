@@ -68,7 +68,7 @@
            <div class="w-100 ">
              <!-- join course, start learning, continue learning, view dashboard buttons -->
              <div class="sb-course-btn-container" *ngIf="!showAddGroup && isTrackable">
-              <div class="certified-course__btn " *ngIf="!enrolledCourse && !viewDashboard">
+              <div class="certified-course__btn " *ngIf="!isReviewerOrCreator() && !enrolledCourse && !viewDashboard">
                 <button [disabled]="!(courseConsumptionService.enableCourseEntrollment | async) || isEnrollmentAllowed(enrollmentEndDate)"
                   [ngClass]="{'sb-btn-disabled': (!(courseConsumptionService.enableCourseEntrollment | async) || isEnrollmentAllowed(enrollmentEndDate))}"
                   class="sb-btn sb-btn-primary sb-btn-normal ml-auto textbook__addbtn w-100 sb-btn-text" tabindex="0"
