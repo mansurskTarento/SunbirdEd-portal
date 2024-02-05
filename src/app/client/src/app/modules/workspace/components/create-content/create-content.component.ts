@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ResourceService, ConfigService, NavigationHelperService } from '@sunbird/shared';
+import { ResourceService, ConfigService, NavigationHelperService,IUserData, ToasterService } from '@sunbird/shared';
 import { FrameworkService, PermissionService, UserService } from '@sunbird/core';
 import { IImpressionEventInput } from '@sunbird/telemetry';
 import { WorkSpaceService } from './../../services';
@@ -55,6 +55,9 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
   * reference of config service.
  */
   public configService: ConfigService;
+
+  userRoles:any;
+  creatorUploadQues:boolean = false;
   /**
 	 * telemetryImpression
 	*/
@@ -73,7 +76,8 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute, public userService: UserService,
     public navigationhelperService: NavigationHelperService,
     public workSpaceService: WorkSpaceService,
-    private router:Router) {
+    private router:Router,
+    private toasterService: ToasterService) {
     this.resourceService = resourceService;
     this.frameworkService = frameworkService;
     this.permissionService = permissionService;
@@ -99,8 +103,20 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
         this.enableWorkspaceList = response.workspaceSetEnablement;
       }
     );
+    this.getUserRole()
   }
 
+  getUserRole(){
+    this.userService.userData$.subscribe((user: IUserData) =>{
+      if(user && !user.err){
+       console.log('useeerr',user.userProfile)
+       this.creatorUploadQues =  user.userProfile?.userRoles?.includes('CONTENT_CREATOR')
+      }
+      else if(user && user.err){
+        this.toasterService.error(this.resourceService.messages.emsg.m0005 || 'Something went wrong, please try again later...');
+      }
+    })
+  }
  
 
   navigateTo(){
