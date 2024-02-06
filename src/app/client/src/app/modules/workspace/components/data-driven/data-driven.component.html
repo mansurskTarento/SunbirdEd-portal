@@ -1,7 +1,7 @@
 
   <div *ngIf="showFrameworkSelection" #formData>
   </div>
-  <sui-modal *ngIf="!showFrameworkSelection" [mustScroll]="true" [isClosable]="false" [transitionDuration]="0" [size]="'normal'"
+  <sui-modal *ngIf="!showFrameworkSelection && contentType!=='questionset'" [mustScroll]="true" [isClosable]="false" [transitionDuration]="0" [size]="'normal'"
   class="sb-modal sb-course-modal" appBodyScroll (dismissed)="goToCreate();" #modal
   [appTelemetryImpression]="telemetryImpression">
 
