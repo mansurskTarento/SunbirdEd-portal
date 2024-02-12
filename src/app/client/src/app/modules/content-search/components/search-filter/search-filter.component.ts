@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, merge, of, zip, BehaviorSubject, defer } from 'rxjs';
 import { debounceTime, map, tap, switchMap, takeUntil, retry, catchError } from 'rxjs/operators';
 import { ContentSearchService } from '../../services';
-import { FormService } from '@sunbird/core';
+import { FormService, UserService } from '@sunbird/core';
 import { IFrameworkCategoryFilterFieldTemplateConfig } from '@project-sunbird/common-form-elements';
 import { CacheService } from 'ng2-cache-service';
 
@@ -46,6 +46,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   selectedNgModels = {};
   private audienceList;
   public refreshSearchFilterComponent = true;
+  userRoles: string[] = [];
+  rolesList: string[] = [];
 
   @ViewChild('sbSearchFrameworkFilterComponent') searchFrameworkFilterComponent: any;
   filterFormTemplateConfig: IFrameworkCategoryFilterFieldTemplateConfig[];
@@ -54,7 +56,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     private contentSearchService: ContentSearchService,
     private activatedRoute: ActivatedRoute, private cdr: ChangeDetectorRef,
     public layoutService: LayoutService, private formService: FormService,
-    private cacheService: CacheService, private utilService: UtilService) { }
+    private cacheService: CacheService, private utilService: UtilService,
+    private userService: UserService) { }
 
   get filterData() {
     return _.get(this.pageData, 'metaData.filters') || ['medium', 'gradeLevel', 'board', 'channel', 'subject', 'audience', 'publisher', 'se_subjects', 'se_boards', 'se_gradeLevels', 'se_mediums'];
@@ -115,6 +118,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getUserRoles();
     this.getFilterForm$();
     this.checkForWindowSize();
     merge(this.boardChangeHandler(), this.fetchSelectedFilterOptions(), this.handleFilterChange(), this.getFacets(), this.filterConfig$)
@@ -123,9 +127,25 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
         console.error('Error while fetching filters', error);
       });
 
-    if (!_.get(this.activatedRoute, 'snapshot.queryParams["board"]')) {
+      const hasBoard = _.get(this.activatedRoute, 'snapshot.queryParams["board"]')
+    if (!hasBoard) {
       const queryParams = { ...this.defaultFilters, selectedTab: _.get(this.activatedRoute, 'snapshot.queryParams.selectedTab') || _.get(this.defaultTab, 'contentType') || 'textbook' };
       this.router.navigate([], { queryParams, relativeTo: this.activatedRoute });
+    }
+  }
+
+  getUserRoles() {
+    if (!this.userRoles) {
+      if (this.userService && this.userService.loggedIn) {
+        this.userService.userData$.subscribe((profileData: any) => {
+          if (profileData
+            && profileData.userProfile
+            && profileData.userProfile['profileUserType']) {
+            this.userRoles = profileData.userProfile['roles'].length ? _.map(profileData.userProfile['roles'], 'role') : [];
+            this.rolesList = _.map(_.get(profileData, 'userProfile.roleList', []), 'id');
+          }
+        });
+      }
     }
   }
 
@@ -460,10 +480,15 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
       switchMap(_ => this._filterConfig$),
       tap((config: IFrameworkCategoryFilterFieldTemplateConfig[]) => {
         this.filterFormTemplateConfig = config.filter(data=>data.category === 'board' || data.category === 'medium' || data.category === 'subject');
+        const rolesList = this.rolesList.filter((role) => role !== 'PUBLIC');
+        const isStudent = this.userRoles.length === 0 || !this.userRoles.filter(userRole => rolesList.some(role => userRole === role)) ? true : false;
         this.resourceService.languageSelected$.pipe(takeUntil(this.unsubscribe$)).subscribe((languageData) => {
           this.filterFormTemplateConfig?.forEach((facet) => {
             facet['labelText'] = this.utilService.transposeTerms(facet['labelText'], facet['labelText'], this.resourceService.selectedLang);
             facet['placeholderText'] = this.utilService.transposeTerms(facet['placeholderText'], facet['placeholderText'], this.resourceService.selectedLang);
+            if(facet.category === 'board' && isStudent) {
+              facet['disabled'] = true;
+            }
           });
         });
         this.refreshSearchFilterComponent = false;
