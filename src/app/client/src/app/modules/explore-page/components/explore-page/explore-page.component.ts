@@ -794,45 +794,38 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
            }
             this.searchService.getMetrics(formBody)
                 .pipe((mergeMap(response => {
-                    const formatedMetricsList = []
+                    const requiredMetricsList = {
+                        draft: {
+                            name: 'Number of questions created',
+                            count: 0
+                        },
+                        live: {
+                            name: 'Number of questions approved',
+                            count: 0
+                        },
+                    }
+                    if (isCreator) {
+                        requiredMetricsList['rejected'] = {
+                            name: 'Number of questions rejected',
+                            count: 0
+                        }
+                        requiredMetricsList['review'] = {
+                            name: 'Number of questions pending for review',
+                            count: 0
+                        }
+                    }
                     const metricsList = _.get(response, 'result.facets[0].values', []);
                     metricsList.forEach((metrics) => {
-                        let formatedMetrics = undefined;
-                        switch (metrics.name) {
-                            case 'draft':
-                                formatedMetrics = {
-                                    name: 'Number of questions created',
-                                    count: metrics.count
-                                }
-                                break;
-                            case 'live':
-                                formatedMetrics = {
-                                    name: 'Number of questions approved',
-                                    count: metrics.count
-                                }
-                                break;
-                        }
-                        if(isCreator) {
-                            switch (metrics.name) {
-                                case 'rejected':
-                                    formatedMetrics = {
-                                        name: 'Number of questions rejected',
-                                        count: metrics.count
-                                    }
-                                    break;
-                                case 'review':
-                                    formatedMetrics = {
-                                        name: 'Number of questions pending for review',
-                                        count: metrics.count
-                                    }
-                                    break;
-                            }
-                        }
-                        if(formatedMetrics) {
-                            formatedMetricsList.push(formatedMetrics);
+                        if(requiredMetricsList[metrics.name]) {
+                            requiredMetricsList[metrics.name].count = metrics.count;
                         }
                     })
-                    return of(formatedMetricsList)
+                    const metricsNames = Object.keys(requiredMetricsList);
+                    const formatedMetricsList = []
+                    metricsNames.forEach((name) => {
+                        formatedMetricsList.push(requiredMetricsList[name]);
+                    })
+                    return of(formatedMetricsList);
                 })))
                 .subscribe((res) => {
                     this.metricsList = res;
