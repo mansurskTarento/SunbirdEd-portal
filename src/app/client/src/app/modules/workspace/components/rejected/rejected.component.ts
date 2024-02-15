@@ -256,7 +256,7 @@ public isUserLoggedIn(): boolean {
       sort_by: { lastUpdatedOn: 'desc' }
     };
     if(this.userRoles.includes ('CONTENT_REVIEWER')) {
-      searchParams.filters['reviewerId'] = this.userService.userid;
+      searchParams.filters['lastPublishedBy'] = this.userService.userid;
     } else {
       searchParams.filters['createdBy'] = this.userService.userid;
     }
@@ -321,7 +321,7 @@ public isUserLoggedIn(): boolean {
       sort_by: this.sort
     };
     if(this.userRoles.includes ('CONTENT_REVIEWER')) {
-      searchParams.filters['reviewerId'] = this.userService.userid;
+      searchParams.filters['lastPublishedBy'] = this.userService.userid;
     } else {
       searchParams.filters['createdBy'] = this.userService.userid;
     }
